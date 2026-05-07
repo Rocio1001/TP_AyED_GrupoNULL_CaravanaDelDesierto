@@ -1,0 +1,58 @@
+# depslib dependency file v1.0
+1777859954 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\menu\menu.c
+
+1777864280 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\tda\arbol.c
+	"../../include/tda/arbol.h"
+
+1777863651 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\arbol.h
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+
+1777864336 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\tda\cola_dinamica.c
+	"../../include/tda/cola_dinamica.h"
+
+1777863521 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\cola_dinamica.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1777858757 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\tda\lista_circular_doble.c
+
+1777864336 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\tda\lista_simple.c
+	"../../include/tda/lista_simple.h"
+
+1777863429 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\lista_simple.h
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+
+1777864594 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1777864489 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\movimiento.c
+	"../../include/juego/movimiento.h"
+
+1777864440 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\movimiento.h
+
+1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\partida.c
+	"../../include/juego/partida.h"
+
+1778077030 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\partida.h
+	"tablero.h"
+	"../tda/cola_dinamica.h"
+
+1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\reglas.c
+	"../../include/juego/reglas.h"
+
+1778076767 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\reglas.h
+
+1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\tablero.c
+	"../../include/juego/tablero.h"
+
+1778076850 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\tablero.h
+	"../tda/lista_circular_doble.h"
+
+1777863530 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
+
