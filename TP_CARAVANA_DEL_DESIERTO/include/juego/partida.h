@@ -1,24 +1,15 @@
 #ifndef PARTIDA_H_INCLUDED
 #define PARTIDA_H_INCLUDED
 
-#include "tablero.h"
-#include "../tda/cola_dinamica.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+#include "reglas.h"
+#include "movimiento.h"
 
 ///SUJETO A CAMBIOS
-
-
-typedef enum{
-     TIPO_JUGADOR,
-     TIPO_BANDIDO
-}tTipoEntidad;
-
-//movimiento a encolar
-typedef struct{
-    tTipoEntidad tipo; //jugador o bandido
-    void* entidad; //puntero a jugador o bandido
-    int pasos; //cantidad que se movió la entidad (lo que sale ens el dado)
-    int direccion; // 1 (avanzo), -1(retrocedo)
-}tMovimiento;
 
 
 
@@ -29,18 +20,21 @@ typedef struct{
     int vidas;
     int proteccion;
     int turno_valido;  // 1(puede moverse) 0 (no puede moverse) - puede pasar que pierda el turno por alguna razon
-    int cant_movimientos; //lo que tiro el dado
     int puntos;
-    tNodo* posicion;
+    tNodoD* posicion;
 }tJugador;
 
+typedef struct{
+    int id;
+    tNodoD* posicion;
+}tBandido;
 
-
+/*
 typedef struct{
     int id;
     int nroMov;
     char descripcion[3]; //FX o BX o NT(en caso de que haya sido un movimiento bloqueado)
-}tLogMovimientos;
+}tLogMovimientos;*/
 
 
 ///        estoy pensando en modularizar este .h y separar algunas estructuras más

@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/entidad/bandido.h" />
+		<Unit filename="include/entidad/jugador.h" />
 		<Unit filename="include/juego/movimiento.h" />
 		<Unit filename="include/juego/partida.h" />
 		<Unit filename="include/juego/reglas.h" />

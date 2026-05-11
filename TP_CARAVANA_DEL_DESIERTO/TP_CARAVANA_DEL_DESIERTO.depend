@@ -27,14 +27,18 @@
 	<string.h>
 	<stdlib.h>
 
-1777864594 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\main.c
+1778077050 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\main.c
 	<stdio.h>
 	<stdlib.h>
 
 1777864489 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\movimiento.c
 	"../../include/juego/movimiento.h"
 
-1777864440 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\movimiento.h
+1778383326 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\movimiento.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"tablero.h"
 
 1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\partida.c
 	"../../include/juego/partida.h"
@@ -46,13 +50,26 @@
 1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\reglas.c
 	"../../include/juego/reglas.h"
 
-1778076767 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\reglas.h
+1778383224 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\reglas.h
+	"tablero.h"
 
 1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\src\juego\tablero.c
 	"../../include/juego/tablero.h"
 
-1778076850 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\tablero.h
+1778383344 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\juego\tablero.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
 	"../tda/lista_circular_doble.h"
+	"../entidad/bandido.h"
+	"../entidad/jugador.h"
 
-1777863530 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
+1778383325 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1778382653 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\entidad\bandido.h
+
+1778383209 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\entidad\jugador.h
 

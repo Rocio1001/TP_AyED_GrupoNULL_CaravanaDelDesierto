@@ -1,0 +1,6 @@
+#ifndef BANDIDO_H_INCLUDED
+#define BANDIDO_H_INCLUDED
+
+
+
+#endif // BANDIDO_H_INCLUDED
