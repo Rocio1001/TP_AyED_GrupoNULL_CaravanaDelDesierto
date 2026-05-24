@@ -35,7 +35,6 @@
 		<Unit filename="include/entidad/jugador.h" />
 		<Unit filename="include/juego/movimiento.h" />
 		<Unit filename="include/juego/partida.h" />
-		<Unit filename="include/juego/reglas.h" />
 		<Unit filename="include/juego/tablero.h" />
 		<Unit filename="include/tda/arbol.h" />
 		<Unit filename="include/tda/cola_dinamica.h" />
@@ -48,9 +47,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/juego/partida.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/juego/reglas.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/juego/tablero.c">

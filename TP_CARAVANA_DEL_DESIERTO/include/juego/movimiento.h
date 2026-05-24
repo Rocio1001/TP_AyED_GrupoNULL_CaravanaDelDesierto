@@ -1,6 +1,7 @@
 #ifndef MOVIMIENTO_H_INCLUDED
 #define MOVIMIENTO_H_INCLUDED
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,10 +18,11 @@ typedef enum{
 typedef struct{
     tTipoEntidad tipo; //jugador o bandido
     void* entidad; //puntero a jugador o bandido
-    int pasos; //cantidad que se movió la entidad (lo que sale ens el dado)
+    int pasos; //cantidad que se moviï¿½ la entidad (lo que sale ens el dado)
     int direccion; // 1 (avanzo), -1(retrocedo)
 }tMovimiento;
 
+//tipo de dato que va a contener el log de movimientos de la partida
 typedef struct{
     int id;
     int nroMov;

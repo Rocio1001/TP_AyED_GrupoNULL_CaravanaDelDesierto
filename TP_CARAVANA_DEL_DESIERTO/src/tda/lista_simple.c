@@ -2,7 +2,7 @@
 
 
 
-///operaciones básicas
+///operaciones bï¿½sicas
 void crear_lista(tLista* pl){
     *pl = NULL;
 }

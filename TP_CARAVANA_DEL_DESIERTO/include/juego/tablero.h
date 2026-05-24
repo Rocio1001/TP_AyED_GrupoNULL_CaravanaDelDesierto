@@ -15,7 +15,7 @@
 #include "../entidad/bandido.h"
 #include "../entidad/jugador.h"
 
-/// EN ESTE MÓDULO DEBERÍA DESARROLLARSE UNICAMENTE GENERACIÓN/ACTUALIZACIÓN Y DESCTRUCCIÓN DEL TABLERO
+/// EN ESTE Mï¿½DULO DEBERï¿½A DESARROLLARSE UNICAMENTE GENERACIï¿½N/ACTUALIZACIï¿½N Y DESCTRUCCIï¿½N DEL TABLERO
 
 //ESTRUCTURA DEL ARCHIVO CONFIG.TXT
 typedef struct{
@@ -28,13 +28,19 @@ typedef struct{
     int max_tormentas;
 }tConfig;
 
-//REPRESENTACIÓN DE QUÉ HAY EN CADA NODO/casillero
+//REPRESENTACIï¿½N DE QUï¿½ HAY EN CADA NODO/casillero
 //existe una forma mejor? seguro
-
+typedef enum{
+    CAS_VACIO,
+    CAS_OASIS,
+    CAS_TORMENTA,
+    CAS_VIDA_EXTRA,
+    CAS_INICIO,
+    CAS_FIN
+}tTipoCasillero;
 typedef struct{
-    char tipoBase; // '.', 'P', 'O', 'T', 'V', 'I', 'S'
-    int hayJugador;   // 0 o 1
-    int cantBandidos; // puede haber más de uno
+    tTipoCasillero tipo;// '.', 'P', 'O', 'T', 'V', 'I', 'S'
+    int hayJugador; // 0 o 1
+    int cantBandidos; // puede haber mï¿½s de uno
 }tCasillero;
-
 #endif // TABLERO_H_INCLUDED
