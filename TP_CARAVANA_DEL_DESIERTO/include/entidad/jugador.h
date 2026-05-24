@@ -10,9 +10,9 @@ typedef struct{
     int id;
     char nombre[30];
     char nombreInterno[40];
-    int proteccion;
-    int turnoValido;
-    int puntos;
+    int proteccion; // 1 tiene, 0 no
+    int turnoValido; //1 valido, 0 no
+    int puntos; // 0 puntos inicialmente
     struct sNodoD* posicion;
 }tJugador;
 

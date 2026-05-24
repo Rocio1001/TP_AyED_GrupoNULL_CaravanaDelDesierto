@@ -76,37 +76,37 @@
 1777864489 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\movimiento.c
 	"../../include/juego/movimiento.h"
 
-1779596145 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\movimiento.h
+1779596602 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\movimiento.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"tablero.h"
 
-1779596244 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\tablero.h
+1779657435 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\tablero.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 	"../tda/lista_circular_doble.h"
 	"../entidad/bandido.h"
 	"../entidad/jugador.h"
 
-1779596252 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
+1779596738 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
 
 1779596323 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\bandido.h
 
-1779596325 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\jugador.h
+1779648162 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\jugador.h
 
-1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\partida.c
+1779656739 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\partida.c
 	"../../include/juego/partida.h"
 
-1778383387 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\partida.h
+1779656711 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\partida.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
-	"reglas.h"
 	"movimiento.h"
 
 1778383224 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\reglas.h
@@ -115,7 +115,7 @@
 1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\reglas.c
 	"../../include/juego/reglas.h"
 
-1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\tablero.c
+1779657224 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\tablero.c
 	"../../include/juego/tablero.h"
 
 1777859954 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\menu\menu.c
@@ -139,7 +139,7 @@
 1779596248 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_circular_doble.c
 	"../../include/tda/lista_circular_doble.h"
 
-1779596247 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_simple.c
+1779638552 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_simple.c
 	"../../include/tda/lista_simple.h"
 
 1777863429 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_simple.h
@@ -147,8 +147,8 @@
 	<string.h>
 	<stdlib.h>
 
-1779592582 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
+1779657063 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
 	<stdio.h>
 	<stdlib.h>
-	"include/tda/lista_circular_doble.h"
+	"include/juego/partida.h"
 
