@@ -8,7 +8,14 @@
 ///como tablero incluye a jugador.h y bandido.h, podemos acceder a ellos solo incluyendo tablero.h
 #include "tablero.h"
 
+///#include "../tda/cola_dinamica.h"
+/*
+    dejo comentado el include "tda_cola" dado que me tira error por re-definición de tNodo, dado que en el main incluyo al ranking.h, el cuál incluye a lista.h y ahí, se define tNodo,
+    generando una re-definición del mismo en el main
 
+    cuando desarrollemos este modulo, analizar y decidir cómo manejarlo.
+
+*/
 typedef enum{
      TIPO_JUGADOR,
      TIPO_BANDIDO

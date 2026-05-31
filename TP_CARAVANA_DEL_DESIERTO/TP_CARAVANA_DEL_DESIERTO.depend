@@ -73,16 +73,16 @@
 
 1778383209 d:\unlam\cursando\3640-algoritmos\tp_caravana_del_desierto\include\entidad\jugador.h
 
-1777864489 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\movimiento.c
+1780151596 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\movimiento.c
 	"../../include/juego/movimiento.h"
 
-1779596602 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\movimiento.h
+1780197993 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\movimiento.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"tablero.h"
 
-1779657435 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\tablero.h
+1780151596 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\tablero.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -91,19 +91,19 @@
 	"../entidad/bandido.h"
 	"../entidad/jugador.h"
 
-1779596738 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
+1780151596 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_circular_doble.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
 
-1779596323 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\bandido.h
+1780151596 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\bandido.h
 
-1779648162 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\jugador.h
+1780151596 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\entidad\jugador.h
 
-1779656739 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\partida.c
+1780175728 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\partida.c
 	"../../include/juego/partida.h"
 
-1779656711 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\partida.h
+1780151596 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\juego\partida.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -115,40 +115,50 @@
 1777864644 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\reglas.c
 	"../../include/juego/reglas.h"
 
-1779657224 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\tablero.c
+1780151596 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\juego\tablero.c
 	"../../include/juego/tablero.h"
 
-1777859954 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\menu\menu.c
+1780151596 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\menu\menu.c
 
-1777864280 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\arbol.c
+1780198984 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\arbol.c
 	"../../include/tda/arbol.h"
 
-1777863651 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\arbol.h
+1780199041 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\arbol.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
 
-1779596249 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\cola_dinamica.c
+1780198824 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\cola_dinamica.c
 	"../../include/tda/cola_dinamica.h"
 
-1777863521 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\cola_dinamica.h
+1780198808 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\cola_dinamica.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1779596248 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_circular_doble.c
+1780151596 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_circular_doble.c
 	"../../include/tda/lista_circular_doble.h"
 
-1779638552 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_simple.c
+1780198634 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\tda\lista_simple.c
 	"../../include/tda/lista_simple.h"
 
-1777863429 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_simple.h
+1780198648 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\tda\lista_simple.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
 
-1779657063 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
+1780199109 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
 	<stdio.h>
 	<stdlib.h>
 	"include/juego/partida.h"
+	"include/sistema/ranking.h"
+
+1780199133 d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\include\sistema\ranking.h
+	"../tda/lista_simple.h"
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+
+1780199127 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sistema\ranking.c
+	"../../include/sistema/ranking.h"
 

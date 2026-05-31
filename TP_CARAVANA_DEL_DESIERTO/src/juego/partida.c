@@ -13,5 +13,6 @@ int ejecutar_partida(tPartida* partida){// aca se juega, se ejecutan funciones d
 }
 
 void finalizar_partida(tPartida* partida){//llama a destruir tablero
+    //destruir bandidos
     destruir_tablero(&partida->tablero);
 }

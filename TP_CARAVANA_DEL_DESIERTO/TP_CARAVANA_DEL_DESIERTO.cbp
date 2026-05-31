@@ -36,6 +36,7 @@
 		<Unit filename="include/juego/movimiento.h" />
 		<Unit filename="include/juego/partida.h" />
 		<Unit filename="include/juego/tablero.h" />
+		<Unit filename="include/sistema/ranking.h" />
 		<Unit filename="include/tda/arbol.h" />
 		<Unit filename="include/tda/cola_dinamica.h" />
 		<Unit filename="include/tda/lista_circular_doble.h" />
@@ -53,6 +54,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/menu/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/sistema/ranking.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/tda/arbol.c">

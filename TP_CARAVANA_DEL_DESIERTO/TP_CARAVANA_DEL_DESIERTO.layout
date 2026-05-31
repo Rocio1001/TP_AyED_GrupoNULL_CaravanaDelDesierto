@@ -2,125 +2,153 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\tda\arbol.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+	<File name="include\tda\cola_dinamica.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="38" topLine="0" />
+			<Cursor1 position="412" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="src\juego\partida.c" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="643" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include\sistema\ranking.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="290" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\tda\arbol.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2603" topLine="0" />
 		</Cursor>
 		<Folding>
 			<Collapse line="6" />
-			<Collapse line="16" />
-			<Collapse line="40" />
-			<Collapse line="77" />
+			<Collapse line="10" />
+			<Collapse line="27" />
+			<Collapse line="59" />
 			<Collapse line="98" />
-			<Collapse line="226" />
-			<Collapse line="232" />
-			<Collapse line="243" />
-			<Collapse line="254" />
+			<Collapse line="106" />
+			<Collapse line="113" />
+			<Collapse line="122" />
+			<Collapse line="150" />
 		</Folding>
 	</File>
-	<File name="src\tda\cola_dinamica.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\juego\movimiento.c" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="118" topLine="0" />
+			<Cursor1 position="45" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\juego\movimiento.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\tda\arbol.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="248" topLine="0" />
+			<Cursor1 position="1858" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\entidad\bandido.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="227" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\tda\lista_simple.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="307" topLine="1" />
-		</Cursor>
-	</File>
-	<File name="include\entidad\jugador.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="205" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\juego\partida.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="545" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\tda\cola_dinamica.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="70" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\tda\lista_circular_doble.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="148" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\juego\tablero.c" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="428" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="3" />
-			<Collapse line="6" />
-			<Collapse line="11" />
-			<Collapse line="64" />
-			<Collapse line="152" />
-			<Collapse line="222" />
-			<Collapse line="237" />
-			<Collapse line="273" />
-			<Collapse line="313" />
-			<Collapse line="374" />
-		</Folding>
-	</File>
-	<File name="include\juego\partida.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\juego\partida.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="165" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\entidad\jugador.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="368" topLine="0" />
+			<Cursor1 position="205" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\juego\movimiento.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\tda\lista_simple.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="43" topLine="0" />
+			<Cursor1 position="1097" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\juego\tablero.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\entidad\bandido.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="378" topLine="0" />
+			<Cursor1 position="227" topLine="0" />
 		</Cursor>
-	</File>
-	<File name="src\tda\lista_simple.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2581" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="8" />
-			<Collapse line="17" />
-			<Collapse line="28" />
-			<Collapse line="44" />
-			<Collapse line="52" />
-			<Collapse line="64" />
-			<Collapse line="82" />
-			<Collapse line="92" />
-		</Folding>
 	</File>
 	<File name="src\tda\lista_circular_doble.c" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4154" topLine="0" />
+			<Cursor1 position="4372" topLine="0" />
 		</Cursor>
 		<Folding>
+			<Collapse line="7" />
 			<Collapse line="28" />
 			<Collapse line="60" />
 			<Collapse line="93" />
 			<Collapse line="116" />
 			<Collapse line="139" />
 			<Collapse line="149" />
+		</Folding>
+	</File>
+	<File name="include\tda\lista_circular_doble.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="148" topLine="15" />
+		</Cursor>
+	</File>
+	<File name="include\juego\tablero.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1354" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="include\juego\movimiento.h" open="1" top="1" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="633" topLine="9" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="375" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\sistema\ranking.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3859" topLine="18" />
+		</Cursor>
+		<Folding>
+			<Collapse line="2" />
+			<Collapse line="8" />
+			<Collapse line="29" />
+			<Collapse line="39" />
+		</Folding>
+	</File>
+	<File name="src\tda\cola_dinamica.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="75" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="1" />
+			<Collapse line="5" />
+			<Collapse line="16" />
+			<Collapse line="23" />
+			<Collapse line="27" />
+			<Collapse line="50" />
+			<Collapse line="66" />
+		</Folding>
+	</File>
+	<File name="src\tda\lista_simple.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1529" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="9" />
+			<Collapse line="12" />
+			<Collapse line="23" />
+			<Collapse line="56" />
+			<Collapse line="95" />
+		</Folding>
+	</File>
+	<File name="src\juego\tablero.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="13754" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="6" />
+			<Collapse line="11" />
+			<Collapse line="64" />
+			<Collapse line="151" />
+			<Collapse line="221" />
+			<Collapse line="236" />
+			<Collapse line="272" />
+			<Collapse line="312" />
+			<Collapse line="373" />
 		</Folding>
 	</File>
 </CodeBlocks_layout_file>

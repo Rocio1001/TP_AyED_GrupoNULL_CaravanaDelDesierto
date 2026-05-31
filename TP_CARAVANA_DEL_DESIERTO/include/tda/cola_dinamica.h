@@ -9,6 +9,11 @@
 #define COLA_VACIA -2
 #define MIN(X,Y)((X)<(Y)?(X):(Y))
 
+///*******************************************************
+/// pensar si usar cola circular, asi ahorramos un puntero
+///*******************************************************
+
+
 typedef struct sNodo{
     void* info;
     size_t tamInfo;

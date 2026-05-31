@@ -9,9 +9,12 @@
 #define LISTA_LLENA -1
 #define LISTA_VACIA -2
 #define DUPLICADO -3
-#define NO_ENCONTRADO -4
-#define POS_INVALIDA -5
 #define MIN(X,Y)((X)<(Y)?(X):(Y))
+
+///******************************************************************************************
+///  PRIMITIVAS  MINIMAS Y NECESARIAS PARA HACER FUNCIONAR EL RANKING
+///******************************************************************************************
+
 
 typedef struct sNodo{
     void* info;
@@ -24,23 +27,12 @@ typedef tNodo* tLista;
 ///operaciones básicas
 void crear_lista(tLista* pl);
 void vaciar_lista (tLista* pl);
-int lista_llena(const tLista* pl, size_t tam);
-int lista_vacia(const tLista* pl);
-///operaciones al principio
-int insertar_en_lista(tLista* pl, const void* pd, size_t tam);
-int ver_primero_lista(const tLista* pl, void* pd, size_t tam);
-int sacar_de_lista(tLista* pl, void* pd, size_t tam);
-///operaciones al final
-int insertar_final_lista(tLista* pl, const void* pd, size_t tam);
-int ver_ultimo_lista(const tLista* pl, void* pd, size_t tam);
-int sacar_ultimo_lista(tLista* pl, void* pd, size_t tam);
-///operaciones en posición determinada
-int insertar_en_pos_lista(tLista* pl, const void* pd, size_t tam,int pos);
-int ver_en_pos_lista(const tLista* pl, void* pd, size_t tam,int pos);
-int sacar_de_pos_lista(tLista* pl, void* pd, size_t tam,int pos);
-
+///insertar ordenado
+int insertar_ordenado_lista(tLista* pl, const void* pd, size_t tam,int aceptDup, int(*cmp)(const void*, const void*),void(*accion)(void**,size_t*,const void*,size_t));
+///ordenar
+//primitiva de ordenamiento que me enseñaron el cuatri pasado, evaluar si esta es la mejor forma de ordenar o si queremos elegir otro algoritmo de ordenamiento
+void ordenar_lista(tLista *pl, int (*cmp)(const void*, const void*));
+///recorrer lista
 void recorrer_lista(tLista * pl, void (*accion)(const void*,size_t, void*), void* param);
-///ordenado
-int insertar_ordenado_lista(tLista* pl, const void* pd, size_t tam, int(*cmp)(const void*, const void*),void(*accion)(void**,size_t*,const void*,size_t));
 
 #endif // LISTA_SIMPLE_H_INCLUDED
