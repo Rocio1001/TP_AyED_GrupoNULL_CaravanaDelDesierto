@@ -2,6 +2,7 @@
 #define RANKING_H_INCLUDED
 
 #include "../tda/lista_simple.h"
+#include "../sesion_e_historico/historico.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,4 +34,3 @@ void imprimir_ranking(const void* dato, size_t tamDato, void* params);
 
 
 #endif // RANKING_H_INCLUDED
- 

@@ -4,12 +4,15 @@
 
 #include "include/juego/partida.h"
 #include "include/menu/menu.h"
-#include "include/sistema_de_puntos/ranking.h"
+#include "include/sistema_de_puntos/ranking.h" ///incluye a historico.h, que contiene el tipo de dato a escribir en historico_partidas.bin
+
+
+
 
 int main(){
     int opcion;
     char buffer[16];
-
+    //tHistorico historico;
     srand((unsigned int)time(NULL));
 
     do {
@@ -28,11 +31,12 @@ int main(){
                 printf("  Preparando configuracion...\n\n");
 
                 if(inicializar_partida(&partida, RUTA_CONFIG) == TODO_OK){
-                    ejecutar_partida(&partida);
+                    ejecutar_partida(&partida); ///evaluar si es void
+                    ///preparar el tipo de dato histozrico y escribirlo
+
                 } else {
                     printf("\n  Error al inicializar la partida.\n");
                 }
-
                 finalizar_partida(&partida);
 
                 printf("\n  Presione Enter para continuar...");

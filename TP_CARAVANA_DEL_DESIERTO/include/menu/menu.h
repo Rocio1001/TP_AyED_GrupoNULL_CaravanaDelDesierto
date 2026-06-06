@@ -2,7 +2,7 @@
 #define MENU_H_INCLUDED
 
 #include <stdio.h>
-
-void mostrar_opciones(void);
+void menu_inicio_sesion();
+void mostrar_opciones();
 
 #endif // MENU_H_INCLUDED

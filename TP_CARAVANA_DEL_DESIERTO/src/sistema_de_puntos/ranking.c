@@ -65,6 +65,7 @@ void imprimir_ranking(const void* dato, size_t tamDato, void* params){
 void crear_y_mostrar_ranking(const char *pathHistorico){
     tLista listaRanking;
     tRanking rank;
+    //tHistorico;
     FILE* pf;
     char linea[256];
 
