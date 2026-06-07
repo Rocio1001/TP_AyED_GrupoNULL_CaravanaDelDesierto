@@ -1,12 +1,15 @@
 #include "../../include/sesion_e_historico/historico.h"
 
-void escribir_historico(tHistorico *historico, const char *pathHistorico){
-    //FILE *pf;
+void escribir_historico(tHistorico* historico, const char* pathHistorico){
+    FILE* pf;
+    long cantReg;
+    pf = fopen(pathHistorico, "a+b");
+    if(!pf)
+        return;
+    fseek(pf, 0L, SEEK_END);
+    cantReg = ftell(pf) / sizeof(tHistorico);
+    historico->idPartida = cantReg + 1;
 
-    // abris archivo historico
-    //te posicionas al final
-    //calculas el ultimo registro
-    //escribis historico->idPartida = posiciónFinal + 1
-    //fread
-    //fclose
+    fwrite(historico, sizeof(tHistorico), 1, pf);
+    fclose(pf);
 }

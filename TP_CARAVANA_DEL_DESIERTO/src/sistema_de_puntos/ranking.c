@@ -63,28 +63,26 @@ void imprimir_ranking(const void* dato, size_t tamDato, void* params){
 
 ///creacion, visualización y destrucción del ranking
 void crear_y_mostrar_ranking(const char *pathHistorico){
-    tLista listaRanking;
-    tRanking rank;
-    //tHistorico;
-    FILE* pf;
-    char linea[256];
+    tLista    listaRanking;
+    tHistorico hist;
+    tRanking   rank;
+    FILE*      pf;
 
-    pf = fopen(pathHistorico, "rt");
+    pf = fopen(pathHistorico, "rb");
     if(!pf){
-        printf("Error al leer archivo %s\n",pathHistorico);
+        printf("  No se encontro el archivo de historico: %s\n", pathHistorico);
         return;
     }
 
     crear_lista(&listaRanking);
-    while(fgets(linea,sizeof(linea),pf)){
-        sscanf(linea,"%d|%29[^|]|%d|%d",
-               &rank.idJugador,
-               rank.jugador,
-               &rank.totalPuntos,
-               &rank.totalMovimientos);
-
-        rank.partidasJugadas = 1;
-        insertar_ordenado_lista(&listaRanking,&rank,sizeof(tRanking),0,cmp_id,acumular_ranking); //insertamos ordenado por idJugador
+    while(fread(&hist, sizeof(tHistorico), 1, pf) == 1){
+        rank.idJugador      = hist.idJugador;
+        strncpy(rank.jugador, hist.nombreJugador, sizeof(rank.jugador) - 1);
+        rank.jugador[sizeof(rank.jugador) - 1] = '\0';
+        rank.totalPuntos     = hist.puntos;
+        rank.totalMovimientos = hist.movimientos;
+        rank.partidasJugadas  = 1;
+        insertar_ordenado_lista(&listaRanking, &rank, sizeof(tRanking), 0, cmp_id, acumular_ranking);
     }
     fclose(pf);
 

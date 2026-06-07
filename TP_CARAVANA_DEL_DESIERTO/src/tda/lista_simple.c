@@ -32,11 +32,11 @@ int insertar_ordenado_lista(tLista* pl, const void* pd, size_t tam,int aceptDup,
 
 
 
-   while(*pl && cmp(pd,(*pl)->info)>0 ){
+   while(*pl && (cmp(pd,(*pl)->info))>0 ){
        pl = &(*pl)->sig;
    }
 
-   if(*pl && cmp(pd,(*pl)->info)==0){ //SI SON IGUALES LOS DATOS A INGRESAR
+   if(*pl && cmp(pd, (*pl)->info) == 0){ //SI SON IGUALES LOS DATOS A INGRESAR
        if(!aceptDup){ //si no acepta duplicados, entro
            if(accion){ //si hay accion a aplicar, aplico accion
                accion(&(*pl)->info, &(*pl)->tamInfo, pd, tam); //aplico accion

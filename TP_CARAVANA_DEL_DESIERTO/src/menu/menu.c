@@ -1,17 +1,4 @@
-#include "../../include/menu/menu.h"
-
-void menu_inicio_sesion(){
-    printf("  +-----------------------------------------+\n");
-    printf("  |           INICIO DE SESION              |\n");
-    printf("  +-----------------------------------------+\n\n");
-    printf("¿Es la primera vez que jugas a Caravana del Desierto?");
-    printf("  1. Si. b\n");
-    printf("  2. No. Tengo usuario\n");
-    printf("  3. Salir\n\n");
-    printf("  Seleccione una opcion: ");
-
-}
-
+#include "../../include/juego/menu.h"
 
 void mostrar_opciones(){
     printf("  +-----------------------------------------+\n");

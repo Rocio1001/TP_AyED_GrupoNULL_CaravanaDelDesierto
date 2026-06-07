@@ -33,10 +33,11 @@
 		</Compiler>
 		<Unit filename="include/entidad/bandido.h" />
 		<Unit filename="include/entidad/jugador.h" />
+		<Unit filename="include/juego/menu.h" />
 		<Unit filename="include/juego/movimiento.h" />
 		<Unit filename="include/juego/partida.h" />
 		<Unit filename="include/juego/tablero.h" />
-		<Unit filename="include/menu/menu.h" />
+		<Unit filename="include/sesion_e_historico/historico.h" />
 		<Unit filename="include/sistema_de_puntos/ranking.h" />
 		<Unit filename="include/tda/arbol.h" />
 		<Unit filename="include/tda/cola_dinamica.h" />
@@ -55,6 +56,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/menu/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/sesion_e_historico/historico.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/sistema_de_puntos/ranking.c">

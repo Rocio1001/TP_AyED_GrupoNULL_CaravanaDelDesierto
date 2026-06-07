@@ -17,16 +17,13 @@
 
 typedef tNodo* tLista;
 
-///operaciones b·sicas
+///operaciones bùsicas
 void crear_lista(tLista* pl);
 void vaciar_lista(tLista* pl);
-///recorrido
-void recorrer_lista(tLista* pl, void (*accion)(const void*, size_t, void*), void* param);
-///insercion ordenada (aceptDup=0: si hay duplicado segun cmp llama a accion en lugar de insertar)
-int insertar_ordenado_lista(tLista* pl, const void* pd, size_t tam, int aceptDup,
-                            int(*cmp)(const void*, const void*),
-                            void(*accion)(void**, size_t*, const void*, size_t));
-///reordenamiento in-place
+
+void recorrer_lista(tLista * pl, void (*accion)(const void*,size_t, void*), void* param);
+///ordenado
+int insertar_ordenado_lista(tLista* pl, const void* pd, size_t tam, int aceptDup, int(*cmp)(const void*, const void*), void(*accion)(void**, size_t*, const void*, size_t));
 void ordenar_lista(tLista* pl, int(*cmp)(const void*, const void*));
 
 #endif // LISTA_SIMPLE_H_INCLUDED
