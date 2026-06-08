@@ -1,398 +1,422 @@
 #include "../../include/juego/tablero.h"
 
-///creacion y destrucción
+/* =========================================================
+   CREACION Y DESTRUCCION
+   ========================================================= */
+
 void crear_tablero(tTablero *tablero){
     crear_lista_doble_cir(&tablero->lista);
+    tablero->cantidadCasilleros = 0;
 }
 void destruir_tablero(tTablero *tablero){
     vaciar_lista_doble_cir(&tablero->lista);
+    tablero->cantidadCasilleros = 0;
 }
 
-///validación de juego viable
-int validar_configuracion(const tConfig* config) {
+/* =========================================================
+   CONFIGURACION
+   ========================================================= */
 
-    int casillerosIntermedios;
-    int elementosSpawnTotal;
-    int elementosHostiles;
-    float porcentajeHostilidad = 0;
+int leer_configuracion(const char* ruta_archivo, tConfig* config){
+    FILE* archConfig;
+    char linea[MAX_LINEA];
 
-    // Validacion inicial - evitar números negativos
-    if (config->cantidadPosiciones<0 ||
-        config->cantidadPosiciones <10 ||
-        config->vidasInicio < 1 ||
-        config->maxBandidos < 0 ||
-        config->maxPremios < 0 ||
-        config->maxVidasExtras < 0 ||
-        config->maxOasis < 0 ||
-        config->maxTormentas < 0
-        ) {
+    archConfig = fopen(ruta_archivo, "rt");
+    if(!archConfig){
+        printf("Error: No se pudo abrir el archivo %s\n", ruta_archivo);
+        return CONFIG_ERROR;
+    }
 
+    while(fgets(linea, sizeof(linea), archConfig)){
+        if(strstr(linea, "cantidad_posiciones"))
+            sscanf(linea, "%*[^:]: %d", &config->cantidadPosiciones);
+        else if(strstr(linea, "vidas_inicio"))
+            sscanf(linea, "%*[^:]: %d", &config->vidasInicio);
+        else if(strstr(linea, "maximo_bandidos"))
+            sscanf(linea, "%*[^:]: %d", &config->maxBandidos);
+        else if(strstr(linea, "maximo_premios"))
+            sscanf(linea, "%*[^:]: %d", &config->maxPremios);
+        else if(strstr(linea, "maximo_vidas_extra"))
+            sscanf(linea, "%*[^:]: %d", &config->maxVidasExtras);
+        else if(strstr(linea, "maximo_oasis"))
+            sscanf(linea, "%*[^:]: %d", &config->maxOasis);
+        else if(strstr(linea, "maximo_tormentas"))
+            sscanf(linea, "%*[^:]: %d", &config->maxTormentas);
+    }
+
+    fclose(archConfig);
+    return CONFIG_OK;
+}
+
+int validar_configuracion(const tConfig* config){
+    int casillerosIntermedios, elementosTotal, elementosHostiles;
+    float hostilidad;
+
+    if(config->cantidadPosiciones < 10 ||
+       config->vidasInicio < 1 ||
+       config->maxBandidos < 0 ||
+       config->maxPremios < 0 ||
+       config->maxVidasExtras < 0 ||
+       config->maxOasis < 0 ||
+       config->maxTormentas < 0){
         printf("Error: Valores negativos o tablero demasiado pequeño (min 10).\n");
         return CONFIG_ERROR;
     }
 
     casillerosIntermedios = config->cantidadPosiciones - 2;
 
+    elementosTotal = config->maxOasis + config->maxTormentas +
+                     config->maxVidasExtras + config->maxPremios;
 
-    // Validar que todos los elementos del tablero, entren en el tablero
-    elementosSpawnTotal = config->maxOasis + config->maxTormentas +
-                            config->maxVidasExtras + config->maxPremios +
-                            config->maxBandidos;
-
-    if (elementosSpawnTotal > casillerosIntermedios) {
-        printf("Error: Imposible spawnear %d elementos en %d casilleros libres.\n",
-               elementosSpawnTotal, casillerosIntermedios);
+    // Con MAX_ELEMENTOS_ESTATICOS por casillero, caben el doble de slots
+    if(elementosTotal > casillerosIntermedios * MAX_ELEMENTOS_ESTATICOS){
+        printf("Error: Imposible colocar %d elementos en %d casilleros (max %d por casillero).\n",
+               elementosTotal, casillerosIntermedios, MAX_ELEMENTOS_ESTATICOS);
         return CONFIG_ERROR;
     }
 
-    // Porcentaje de Jugabilidad
     elementosHostiles = config->maxBandidos + config->maxTormentas;
-
-    // Calculamos qué porcentaje del tablero es puro peligro
-    porcentajeHostilidad = (float)elementosHostiles / casillerosIntermedios;
-
-    // Verificamos que no pase el límite (55%) (puede cambiarse en la macro y probar otros %)
-    if (porcentajeHostilidad > MAX_HOSTILIDAD_PERMITIDA) {
-            printf("Error: Escenario injugable. Hay %.0f%% de hostilidad (Max %.0f%% permitido).\n",
-                     porcentajeHostilidad * 100, MAX_HOSTILIDAD_PERMITIDA * 100);
+    hostilidad = (float)elementosHostiles / casillerosIntermedios;
+    if(hostilidad > MAX_HOSTILIDAD_PERMITIDA){
+        printf("Error: Escenario injugable. Hostilidad: %.0f%% (Max %.0f%%).\n",
+               hostilidad * 100, MAX_HOSTILIDAD_PERMITIDA * 100);
         return CONFIG_ERROR;
     }
 
     return CONFIG_OK;
 }
 
-///leo config.txt y lo bajo a la estructura
-int leer_configuracion(const char* ruta_archivo, tConfig* config) {
-    FILE* archConfig;
-    char linea[MAX_LINEA];
-    //char* dosPuntos;
-    //int valor;
-
-    archConfig = fopen(ruta_archivo, "rt");
-    if (!archConfig) {
-        printf("Error: No se pudo abrir el archivo %s\n", ruta_archivo);
+int preparar_configuracion(const char* ruta_archivo, tConfig* config){
+    if(leer_configuracion(ruta_archivo, config) == CONFIG_ERROR){
+        system("pause");
         return CONFIG_ERROR;
     }
-
-    // Inicializamos la estructura en 0 por seguridad _recomenación de la IA
-    //memset(config, 0, sizeof(tConfig));
-
-    // Leemos el archivo línea por línea
-    while (fgets(linea, sizeof(linea), archConfig)) {
-
-        // Identificamos el parámetro y extraemos su valor con sscanf
-        if (strstr(linea, "cantidad_posiciones")) {
-            sscanf(linea, "%*[^:]: %d", &config->cantidadPosiciones);
-        }
-        else if (strstr(linea, "vidas_inicio")) {
-            sscanf(linea, "%*[^:]: %d", &config->vidasInicio);
-        }
-        else if (strstr(linea, "maximo_bandidos")) {
-            sscanf(linea, "%*[^:]: %d", &config->maxBandidos);
-        }
-        else if (strstr(linea, "maximo_premios")) {
-            sscanf(linea, "%*[^:]: %d", &config->maxPremios);
-        }
-        else if (strstr(linea, "maximo_vidas_extra")) {
-            sscanf(linea, "%*[^:]: %d", &config->maxVidasExtras);
-        }
-        else if (strstr(linea, "maximo_oasis")) {
-            sscanf(linea, "%*[^:]: %d", &config->maxOasis);
-        }
-        else if (strstr(linea, "maximo_tormentas")) {
-            sscanf(linea, "%*[^:]: %d", &config->maxTormentas);
-        }
+    if(validar_configuracion(config) == CONFIG_ERROR){
+        system("pause");
+        return CONFIG_ERROR;
     }
-    /*
-    //OTRA FORMA DE LEERLO
-    while (fgets(linea, sizeof(linea), archConfig)) {
-
-        // Buscamos dónde están los dos puntos ':' en la línea leída
-        dosPuntos = strchr(linea, ':');
-
-        if (dosPuntos != NULL) {
-            // 'dosPuntos' es un puntero al ':'.
-            // 'dosPuntos + 1' apunta al número que está inmediatamente después.
-            // atoi ignora los espacios en blanco iniciales mágicamente.
-            valor = atoi(dosPuntos + 1);
-
-            // Buscamos la palabra clave en la línea ignorando la viñeta
-            if (strstr(linea, "cantidad_posiciones")) {
-                config->cantidadPosiciones = valor;
-            }
-            else if (strstr(linea, "vidas_inicio")) {
-                config->vidasInicio = valor;
-            }
-            else if (strstr(linea, "maximo_bandidos")) {
-                config->maxBandidos = valor;
-            }
-            else if (strstr(linea, "maximo_premios")) {
-                config->maxPremios = valor;
-            }
-            else if (strstr(linea, "maximo_vidas_extra")) {
-                config->maxVidas_extras = valor;
-            }
-            else if (strstr(linea, "maximo_oasis")) {
-                config->maxOasis = valor;
-            }
-            else if (strstr(linea, "maximo_tormentas")) {
-                config->maxTormentas = valor;
-            }
-        }
-    }
-*/
-
-
-
-    fclose(archConfig);
-    return CONFIG_OK; // CONFIG_OK
+    return CONFIG_OK;
 }
 
-///construyo y coloco los casilleros en el tablero
-int construir_casilleros_estaticos_tablero(tTablero* tablero, const tConfig* config) {
-    int i, j, indiceActual;
-    tTipoCasillero tempTipo;
-    tCasillero casilleroNuevo;
-    tTipoCasillero* vectorTipos;
+/* =========================================================
+   CONSULTAS SOBRE CASILLEROS
+   ========================================================= */
 
-    // Pedimos memoria dinámica para nuestro vector temporal
-    vectorTipos = (tTipoCasillero*)malloc(config->cantidadPosiciones * sizeof(tTipoCasillero));
-    if (!vectorTipos) {
-        return TABLERO_ERROR; // Sin memoria
+int casillero_es_inicio(const tCasillero* cas){
+    int i;
+    for(i = 0; i < cas->cantEstaticos; i++)
+        if(cas->estaticos[i] == CAS_INICIO) return 1;
+    return 0;
+}
+
+int casillero_es_fin(const tCasillero* cas){
+    int i;
+    for(i = 0; i < cas->cantEstaticos; i++)
+        if(cas->estaticos[i] == CAS_FIN) return 1;
+    return 0;
+}
+
+/*
+ * Verifica si se puede agregar un tipo estatico al casillero.
+ * Restricciones:
+ *   - No superar MAX_ELEMENTOS_ESTATICOS
+ *   - No puede haber dos OASIS
+ *   - No puede haber dos TORMENTAS
+ *   - No puede haber OASIS + TORMENTA juntos
+ */
+int puede_agregar_estatico(const tCasillero* cas, tTipoCasillero tipo){
+    int i;
+    if(cas->cantEstaticos >= MAX_ELEMENTOS_ESTATICOS) return 0;
+    for(i = 0; i < cas->cantEstaticos; i++){
+        if(tipo == CAS_OASIS    && cas->estaticos[i] == CAS_OASIS)    return 0;
+        if(tipo == CAS_TORMENTA && cas->estaticos[i] == CAS_TORMENTA) return 0;
+        if(tipo == CAS_OASIS    && cas->estaticos[i] == CAS_TORMENTA) return 0;
+        if(tipo == CAS_TORMENTA && cas->estaticos[i] == CAS_OASIS)    return 0;
+    }
+    return 1;
+}
+
+/*
+ * Elimina la primera aparicion de `tipo` del arreglo de estaticos
+ * del casillero, compactando el array.
+ */
+void remover_estatico_casillero(tCasillero* cas, tTipoCasillero tipo){
+    int i, j;
+    for(i = 0; i < cas->cantEstaticos; i++){
+        if(cas->estaticos[i] == tipo){
+            for(j = i; j < cas->cantEstaticos - 1; j++)
+                cas->estaticos[j] = cas->estaticos[j + 1];
+            cas->cantEstaticos--;
+            return;
+        }
+    }
+}
+
+/*
+ * Reposiciona un bandido desde su casillero actual a uno intermedio
+ * aleatorio valido (sin superar MAX_BANDIDOS_POR_CASILLERO).
+ * Se usa cuando el bandido queda atrapado en INICIO al volver el jugador.
+ */
+void reposicionar_bandido(tTablero* tablero, tBandido* bandido){
+    tNodoD* actual;
+    tCasillero* cas;
+    int intentos = 0, j, posAleat;
+
+    /* Liberar el slot en el casillero actual */
+    cas = (tCasillero*)bandido->posicion->info;
+    cas->cantBandidos--;
+
+    do {
+        posAleat = (rand() % (tablero->cantidadCasilleros - 2)) + 1;
+        actual = tablero->lista;
+        for(j = 0; j < posAleat; j++)
+            actual = actual->sig;
+        cas = (tCasillero*)actual->info;
+        intentos++;
+    } while(cas->cantBandidos >= MAX_BANDIDOS_POR_CASILLERO && intentos < 50);
+
+    bandido->posicion = actual;
+    cas->cantBandidos++;
+}
+
+/* =========================================================
+   CONSTRUCCION DEL TABLERO
+   ========================================================= */
+
+/*
+ * Distribuye los elementos estaticos en los casilleros intermedios.
+ * Algoritmo:
+ *   1. Inserta INICIO, N-2 casilleros vacios y FIN en la lista.
+ *   2. Genera un vector con todos los elementos a colocar y lo mezcla.
+ *   3. Para cada elemento elige un casillero intermedio aleatorio
+ *      y verifica las restricciones antes de insertarlo (max 200 intentos).
+ */
+int construir_casilleros_estaticos_tablero(tTablero* tablero, const tConfig* config){
+    int i, j, totalElementos, colocado, intentos, posAleat;
+    tCasillero casillero;
+    tNodoD* nodoActual;
+    tTipoCasillero* elementos;
+    tTipoCasillero temp;
+
+    // --- Paso 1: insertar todos los casilleros en la lista ---
+
+    casillero.cantEstaticos = 1;
+    casillero.estaticos[0]  = CAS_INICIO;
+    casillero.hayJugador    = 0;
+    casillero.cantBandidos  = 0;
+    if(insertar_ult_lista_doble_cir(&tablero->lista, &casillero, sizeof(tCasillero)) != TODO_OK)
+        return TABLERO_ERROR;
+
+    casillero.cantEstaticos = 0;
+    for(i = 1; i < config->cantidadPosiciones - 1; i++){
+        if(insertar_ult_lista_doble_cir(&tablero->lista, &casillero, sizeof(tCasillero)) != TODO_OK)
+            return TABLERO_ERROR;
     }
 
-    // Fijamos los anclajes iniciales
-    vectorTipos[0] = CAS_INICIO;
-    vectorTipos[config->cantidadPosiciones - 1] = CAS_FIN;
+    casillero.cantEstaticos = 1;
+    casillero.estaticos[0]  = CAS_FIN;
+    casillero.hayJugador    = 0;
+    casillero.cantBandidos  = 0;
+    if(insertar_ult_lista_doble_cir(&tablero->lista, &casillero, sizeof(tCasillero)) != TODO_OK)
+        return TABLERO_ERROR;
 
-    // Llenamos el vector temporal según el config.txt
-    indiceActual = 1;
+    // --- Paso 2: armar y mezclar vector de elementos ---
+    totalElementos = config->maxOasis + config->maxTormentas +
+                     config->maxVidasExtras + config->maxPremios;
 
-    for (i = 0; i < config->maxOasis; i++) {
-        vectorTipos[indiceActual++] = CAS_OASIS;
-    }
-    for (i = 0; i < config->maxTormentas; i++) {
-        vectorTipos[indiceActual++] = CAS_TORMENTA;
-    }
-    for (i = 0; i < config->maxVidasExtras; i++) {
-        vectorTipos[indiceActual++] = CAS_VIDA_EXTRA;
-    }
-    for (i = 0; i < config->maxPremios; i++) {
-        vectorTipos[indiceActual++] = CAS_PREMIO;
-    }
+    if(totalElementos == 0) return TODO_OK;
 
-    // Rellenamos los casilleros sobrantes con casilleros vacíos
-    while (indiceActual < config->cantidadPosiciones - 1) {
-        vectorTipos[indiceActual++] = CAS_VACIO;
-    }
+    elementos = (tTipoCasillero*)malloc(sizeof(tTipoCasillero) * totalElementos);
+    if(!elementos) return TABLERO_ERROR;
 
-    // Mezclamos de forma random los casilleros estaticos
-    // Solo mezclamos los elementos INTERMEDIOS (índices del 1 al N-2).
-    for (i = config->cantidadPosiciones - 2; i > 1; i--) {
-        // Generamos un índice aleatorio 'j' entre 1 e 'i'
-        j = (rand() % i) + 1;
+    j = 0;
+    for(i = 0; i < config->maxOasis;       i++) elementos[j++] = CAS_OASIS;
+    for(i = 0; i < config->maxTormentas;   i++) elementos[j++] = CAS_TORMENTA;
+    for(i = 0; i < config->maxVidasExtras; i++) elementos[j++] = CAS_VIDA_EXTRA;
+    for(i = 0; i < config->maxPremios;     i++) elementos[j++] = CAS_PREMIO;
 
-        // Intercambiamos el elemento en 'i' con el elemento en 'j'
-        tempTipo = vectorTipos[i];
-        vectorTipos[i] = vectorTipos[j];
-        vectorTipos[j] = tempTipo;
+    // Fisher-Yates shuffle
+    for(i = totalElementos - 1; i > 0; i--){
+        j = rand() % (i + 1);
+        temp = elementos[i];
+        elementos[i] = elementos[j];
+        elementos[j] = temp;
     }
 
-    // Ahora que el vector está mezclado, lo pasamos al tablero oficial (lista circular doble)
-    for (i = 0; i < config->cantidadPosiciones; i++) {
+    // --- Paso 3: distribuir cada elemento en un casillero intermedio valido ---
+    for(i = 0; i < totalElementos; i++){
+        colocado = 0;
+        intentos = 0;
+        while(!colocado && intentos < 200){
+            posAleat = (rand() % (config->cantidadPosiciones - 2)) + 1;
 
-        // Armamos el casillero
-        casilleroNuevo.tipo = vectorTipos[i];
-        casilleroNuevo.hayJugador = 0;   // Se posicionará después
-        casilleroNuevo.cantBandidos = 0; // Se posicionarán después
+            nodoActual = tablero->lista;
+            for(j = 0; j < posAleat; j++)
+                nodoActual = nodoActual->sig;
 
-        // Insertamos al final
-        if (insertar_ult_lista_doble_cir(&tablero->lista, &casilleroNuevo, sizeof(tCasillero)) != TODO_OK) {
-            free(vectorTipos);
-            return TABLERO_ERROR; // Falla al insertar
+            if(puede_agregar_estatico((tCasillero*)nodoActual->info, elementos[i])){
+                tCasillero* cas = (tCasillero*)nodoActual->info;
+                cas->estaticos[cas->cantEstaticos++] = elementos[i];
+                colocado = 1;
+            }
+            intentos++;
+        }
+        if(!colocado){
+            free(elementos);
+            printf("Error: no se pudieron colocar todos los elementos estaticos.\n");
+            return TABLERO_ERROR;
         }
     }
 
-    // Destruimos vector temporal
-    free(vectorTipos);
-
+    free(elementos);
     return TODO_OK;
 }
-///posiciono a los bandidos y al jugador
-void posicionar_e_inicializar_jugador(tTablero* tablero, tJugador *jugador, tConfig *config){
-    tCasillero* infoCasillero;
 
-    // El jugador apunta al primer nodo del tablero
+void posicionar_e_inicializar_jugador(tTablero* tablero, tJugador *jugador, const tConfig *config){
+    tCasillero* cas;
+
     jugador->posicion = tablero->lista;
+    cas = (tCasillero*)jugador->posicion->info;
+    cas->hayJugador = 1;
 
-    //Extraemos la información de ese primer nodo y actualizamos el casillero, avisando que hay un jugador
-    infoCasillero = (tCasillero*)jugador->posicion->info;
-    infoCasillero->hayJugador = 1;
-
-    // valores iniciales
-    jugador->proteccion = 0;
+    ///id y nombre se carga al inicio al iniciar sesion
+    //jugador->id          = 0; ///Revisar
+    //jugador->nombre[0]   = '\0'; ///Revisar
+    jugador->vidas       = config->vidasInicio;
+    jugador->proteccion  = 0;
     jugador->turnoValido = 1;
-    jugador->puntos = 0;
+    jugador->puntos      = 0;
 }
-int posicionar_bandidos(tTablero* tablero, int totalBandidos, tBandido *bandido) {
-    int i, intentos, posAleatoria;
+
+int posicionar_bandidos(tTablero* tablero, int totalBandidos, tBandido *bandido){
+    int i, j, intentos, posAleatoria;
     tNodoD* casilleroActual;
     tCasillero* info;
 
-    for (i = 0; i < totalBandidos; i++) {
+    for(i = 0; i < totalBandidos; i++){
         intentos = 0;
-
-        // Intentamos encontrar un lugar válido con corte de control
         do {
-            // Elegir un número aleatorio entre 1 y N-2
             posAleatoria = (rand() % (tablero->cantidadCasilleros - 2)) + 1;
-
-            // Navegar hasta ese nodo
-            casilleroActual = tablero->lista; //le doy el inicio de al lista
-            for (int j = 0; j < posAleatoria; j++) {
+            casilleroActual = tablero->lista;
+            for(j = 0; j < posAleatoria; j++)
                 casilleroActual = casilleroActual->sig;
-            }
-
             info = (tCasillero*)casilleroActual->info;
             intentos++;
+        } while(info->cantBandidos >= MAX_BANDIDOS_POR_CASILLERO && intentos < 50);
 
-        // Condición de éxito: Casillero con menos de X bandidos
-        } while (info->cantBandidos >= MAX_BANDIDOS_POR_CASILLERO && intentos < 50);
-
-        // Spawneo
         info->cantBandidos++;
-        bandido[i].id = i;
+        bandido[i].id       = i;
         bandido[i].posicion = casilleroActual;
-
     }
-
     return TODO_OK;
 }
 
-///construye el tablero, TODO (llama a las funciones que hacen posible la creación de todo el tablero)
-int construir_tablero(tTablero *tablero, tBandido **bandido, tJugador *jugador, const char *pathConfigTxt){
-    //FILE *pCaravana;
-    tConfig configuracion;
+int construir_tablero(tTablero *tablero, tBandido **bandido, tJugador *jugador, const tConfig *config){
+    tablero->cantidadCasilleros = config->cantidadPosiciones;
 
-    ///leo config.txt
-    if(leer_configuracion(pathConfigTxt,&configuracion) == CONFIG_ERROR){
-        system("pause"); //acá pongo un "pause" porque el mensaje de "error" ya lo dice la misma funcion que lee, por ende aca solo recibimos y pausamos en caso de error.
-        return CONFIG_ERROR;
-    }
-    ///valido que sea una configuración con una solución posible (que sea jugable)
-    if(validar_configuracion(&configuracion) == CONFIG_ERROR){
-        system("pause"); //acá pongo un "pause" porque el mensaje de "error" ya lo dice la misma funcion que valida, por ende aca solo recibimos y pausamos en caso de error.
-        return CONFIG_ERROR;
-    }
-    ///ya conocemos cuántos casilleros tiene, asi que lo escribimos
-    tablero->cantidadCasilleros = configuracion.cantidadPosiciones;
-
-    ///creo el vector de bandidos (esto se hace acá porque ya validamos que es posible)
-    *bandido = (tBandido*)malloc(sizeof(tBandido)*configuracion.maxBandidos);
+    *bandido = (tBandido*)malloc(sizeof(tBandido) * config->maxBandidos);
     if(!*bandido){
-        printf("Sin memoria.");
+        printf("Sin memoria.\n");
         return TABLERO_ERROR;
     }
 
-    ///distribuyo los casilleros estáticos en el tablero
-    if(construir_casilleros_estaticos_tablero(tablero, &configuracion)!= TODO_OK){
-        printf("Error al generar el tablero.");
+    if(construir_casilleros_estaticos_tablero(tablero, config) != TODO_OK){
+        printf("Error al generar el tablero.\n");
         return TABLERO_ERROR;
     }
-    ///distribuyo los bandidos en el tablero y verifico que sea valido
-    if(posicionar_bandidos(tablero,configuracion.maxBandidos,*bandido)!=TODO_OK){
-        printf("Error al posicionar bandidos.");
+
+    if(posicionar_bandidos(tablero, config->maxBandidos, *bandido) != TODO_OK){
+        printf("Error al posicionar bandidos.\n");
         return TABLERO_ERROR;
     }
-    ///posiciono al jugador en el tablero (al inicio)
-    posicionar_e_inicializar_jugador(tablero,jugador,&configuracion);
+
+    posicionar_e_inicializar_jugador(tablero, jugador, config);
     return TABLERO_GENERADO;
 }
 
-///escribe caravana.txt
-void actualizar_caravana_txt(tTablero *tablero, const char *pathCaravanaTxt) {
+/* =========================================================
+   VISUALIZACION
+   ========================================================= */
+
+static char char_de_estatico(tTipoCasillero tipo){
+    switch(tipo){
+        case CAS_INICIO:     return 'I';
+        case CAS_FIN:        return 'F';
+        case CAS_OASIS:      return 'O';
+        case CAS_TORMENTA:   return 'T';
+        case CAS_VIDA_EXTRA: return 'V';
+        case CAS_PREMIO:     return 'P';
+        default:             return '?';
+    }
+}
+
+void actualizar_caravana_txt(tTablero *tablero, const char *pathCaravanaTxt){
     FILE *pf;
     tNodoD *nodo_actual;
-    tCasillero *casillero;
-    int i;
-    char charTerreno;
+    tCasillero *cas;
+    int i, j;
 
     pf = fopen(pathCaravanaTxt, "wt");
-    if (!pf) {
+    if(!pf){
         printf("Error: No se pudo crear/abrir el archivo %s\n", pathCaravanaTxt);
         return;
     }
 
-    if (!tablero->lista) {
-        fprintf(pf, "El tablero está vacío o no se ha generado.\n");
+    if(!tablero->lista){
+        fprintf(pf, "El tablero esta vacio.\n");
         fclose(pf);
         return;
     }
 
     nodo_actual = tablero->lista;
-
     fprintf(pf, "=== ESTADO DE LA CARAVANA ===\n\n");
 
-    for (i = 0; i < tablero->cantidadCasilleros; i++) {
-        casillero = (tCasillero*)nodo_actual->info;
+    for(i = 0; i < tablero->cantidadCasilleros; i++){
+        cas = (tCasillero*)nodo_actual->info;
 
-        switch (casillero->tipo) {
-            case CAS_INICIO:     charTerreno = 'I'; break;
-            case CAS_FIN:        charTerreno = 'F'; break;
-            case CAS_OASIS:      charTerreno = 'O'; break;
-            case CAS_TORMENTA:   charTerreno = 'T'; break;
-            case CAS_VIDA_EXTRA: charTerreno = 'V'; break;
-            case CAS_PREMIO:     charTerreno = 'P'; break;
-            case CAS_VACIO:      charTerreno = '-'; break;
-            default:             charTerreno = '?'; break;
-        }
+        fprintf(pf, "[");
 
-        fprintf(pf, "[%c", charTerreno);
+        // '-' solo si el casillero no tiene NINGUN elemento (ni estatico ni dinamico)
+        if(cas->cantEstaticos == 0 && cas->cantBandidos == 0 && !cas->hayJugador){
+            fprintf(pf, "-");
+        } else {
+            // Elementos estaticos
+            for(j = 0; j < cas->cantEstaticos; j++){
+                if(j > 0) fprintf(pf, " ");
+                fprintf(pf, "%c", char_de_estatico(cas->estaticos[j]));
+            }
 
-        if (casillero->hayJugador) {
-            fprintf(pf, " J");
-        }
-        //por ahora esta así, esto hay que modificarlo
-        if (casillero->cantBandidos > 0) {
-            if (casillero->cantBandidos > 1) {
-                fprintf(pf, " B%d", casillero->cantBandidos);
-            } else {
-                fprintf(pf, " B");
+            // Bandidos (uno por uno)
+            for(j = 0; j < cas->cantBandidos; j++){
+                if(cas->cantEstaticos > 0 || j > 0) fprintf(pf, " ");
+                fprintf(pf, "B");
+            }
+
+            // Jugador
+            if(cas->hayJugador){
+                if(cas->cantEstaticos > 0 || cas->cantBandidos > 0) fprintf(pf, " ");
+                fprintf(pf, "J");
             }
         }
 
-        // Cerramos el casillero
         fprintf(pf, "]\n");
-
         nodo_actual = nodo_actual->sig;
     }
 
-    fprintf(pf, "\n\n=============================\n");
-
+    fprintf(pf, "\n=============================\n");
     fclose(pf);
 }
-void mostrar_caravana_txt(const char *pathCaravanaTxt) {
+
+void mostrar_caravana_txt(const char *pathCaravanaTxt){
     FILE *pf;
     char linea[MAX_LINEA];
 
     pf = fopen(pathCaravanaTxt, "rt");
-    if (!pf) {
+    if(!pf){
         printf("Error: No se encontro el archivo %s.\n", pathCaravanaTxt);
         return;
     }
-    while (fgets(linea, sizeof(linea), pf)) {
+    while(fgets(linea, sizeof(linea), pf))
         printf("%s", linea);
-    }
     fclose(pf);
 }
-
-/// cambios ===============================================================
-void actualizar_tablero(tTablero* tablero, tCola* colaMovimientos)
-{
-    aplicarMovimientos(tablero, colaMovimientos);
-    //actualizar carvana.txt una vez se hayan desencolado los movimientos
-    actualizar_caravana_txt(tablero,"caravana.txt");
-}
-
-///esta iria en movimientos.h y .c pero no andaba ahí
-

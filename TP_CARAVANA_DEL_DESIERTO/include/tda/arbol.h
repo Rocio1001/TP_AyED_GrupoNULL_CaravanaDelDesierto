@@ -6,18 +6,18 @@
 #include <stdlib.h>
 
 #define CLA_DUP -2
-#define SIN_MEM -1
+#define SIN_MEM -4 ///CAMBIE ESTE POR -4
 #define SIN_INICIALIZAR -3
-#define ERROR_ARCH -4
+#define ERROR_ARCH -1 ///Y ESTE POR -1 POR QUE ME DABA WARNING DE REDEFINICION
 #define TODO_OK 1
 #define MIN(X,Y) ((X)<(Y)?(X):(Y))
 #define MAX(X,Y) ((X)>(Y)?(X):(Y))
 
-typedef struct sNodo{
+typedef struct sNodoA{ ///le cambie el nombre de sNodo a sNodoA pq si no me daba error por nodo.h
     void* info;
     size_t tamInfo;
-    struct sNodo *izq;
-    struct sNodo *der;
+    struct sNodoA *izq;
+    struct sNodoA *der;
 }tNodoA;
 
 typedef tNodoA *tArbol;
@@ -78,5 +78,8 @@ int cargarDesdeDatosOrdenadosArbolBinBusq(tArbol * p, void * ds, unsigned cantRe
 unsigned leerDesdeArchivoBin(void ** pd, void * pf,unsigned pos, void * params);
 int cargarArchivoBinOrdenadoAbiertoArbolBinBusq(tArbol *pa, FILE * pf, size_t tamInfo);//si el archivo binario fue previamente abierto, usamos lo siguiente. Es una función envoltorio que prepara el llamado a la recursiva
 int cargarArchivoBinOrdenadoArbolBinBusq(tArbol *p, const char * path,unsigned tamInfo);//si el archivo binario no fue abierto, usamos lo siguiente. Es una función envoltorio que prepara el llamado a la recursiva
+
+///agus
+void crearArchOrdBinArbol(tArbol *p, FILE* pf);
 
 #endif // ARBOL_H_INCLUDED

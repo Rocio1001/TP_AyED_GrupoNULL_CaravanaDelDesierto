@@ -1,71 +1,136 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-#define RUTA_CONFIG "config.txt"
-#define RUTA_CARAVANA "caravana.txt"
 #include "include/juego/partida.h"
-#define RUTA
+#include "include/juego/menu.h"
+#include "include/sistema_de_puntos/ranking.h"
+#include "include/sesion_e_historico/historico.h"
+
+#include "include/sesion_e_historico/sesion_y_alta.h" ///agus
+
+#define RUTA_HISTORICO_BIN "historico_partidas.bin"
+#define RUTA_MAESTRO_JUGADORES_BIN "maestro_jugadores.bin" ///agus
+
+///función para chequear que todo este oki
+void mostrar_historico(const char* file_name) {
+
+    tHistorico historico;
+    FILE* pArchivo = fopen(file_name, "rb");
+
+    if(pArchivo == NULL) {
+        printf("Error al abrir el archivo\n");
+    }
+
+    printf("  +-----------------------------------------+\n");
+    printf("  |             HISTORICO PARTIDAS          |\n");
+    printf("  +-----------------------------------------+\n");
+
+
+    fread(&historico, sizeof(tHistorico), 1, pArchivo);
+    while(!feof(pArchivo)) {
+
+        printf("ID Partida: %-4d | ID Jugador: %-4d | Nombre Jugador: %-30s | Puntos: %-4d | Movimientos: %-4d \n",
+            historico.idPartida,
+            historico.idJugador,
+            historico.nombreJugador,
+            historico.puntos,
+            historico.movimientos);
+
+        fread(&historico, sizeof(tHistorico), 1, pArchivo);
+    }
+
+    fclose(pArchivo);
+}
 
 int main(){
-    //tPartida miPartida;
-    ///PRUEBA DE GENERAR UN TABLERO.
-    srand(time(NULL));
-    tTablero tablero;
-    tBandido *bandidos;
-    tJugador jugador;
-    crear_tablero(&tablero);
-    if(construir_tablero(&tablero,&bandidos,&jugador,RUTA_CONFIG) != TABLERO_GENERADO){
-        destruir_tablero(&tablero);
-        return 0;
+    int opcion, resultado;
+    char buffer[16];
+    tPartida partida;
+    tHistorico historico;
+
+    srand((unsigned int)time(NULL));
+
+    resultado = iniciar_sesion(&partida.jugador, RUTA_MAESTRO_JUGADORES_BIN);
+    if(resultado == SESION_ALTA)
+    {
+        printf("  Usuario cargado con ID: %d\n", partida.jugador.id);
     }
-    actualizar_caravana_txt(&tablero,RUTA_CARAVANA);
-    mostrar_caravana_txt(RUTA_CARAVANA);
+    else
+    {
+        printf("  Error en inicio de sesion\n");
+        ///QUE HABRIA QUE HACER? (terminar el programa?)
+    }
+
     system("pause");
-    ///========================================
 
-    /*
-    //Probar dado y direccion
-    int dado, direccion_mov;
+    do {
+        system("cls");
 
-    printf("Presione un tecla para tirar el dado...\n");
-    dado = tirarDado();
-    printf("Seleccione una direccion Avanzar (1) o Retroceder (-1)\n");
-    scanf("%d", &direccion_mov);
-    printf("MOVIMIENTO >> %d\n", direccion_mov * dado);
-    system("pause");
-    */
+        mostrar_opciones();
+        //solo para ver si estaba seleccionando bien
+        printf("\n");
+        printf("Jugador ID: %d\n",partida.jugador.id);
+        printf("Jugador Nombre: %s\n",partida.jugador.nombre);
 
-    /// guardo el movimiento de jugador
-    int direccion_mov;
-    tMovimiento movimiento;
+        fgets(buffer, sizeof(buffer), stdin);
+        opcion = atoi(buffer);
 
+        switch(opcion){
+            case 1:{
 
-    ///para testear nomas
-    printf("Cantidad de pasos: ");
-    scanf("%d", &movimiento.pasos);
+                system("cls");
+                printf("  Preparando configuracion...\n\n");
 
+                if(inicializar_partida(&partida, RUTA_CONFIG) == TODO_OK){
+                    ejecutar_partida(&partida);
 
-    movimiento.tipo = TIPO_JUGADOR;
-    movimiento.entidad = &jugador;
-    //movimiento.pasos = tirarDado();
-    printf("Resultado del dado: %d\n", movimiento.pasos);
-    printf("Seleccione una direccion Avanzar (1) o Retroceder (-1)\n");
-    scanf("%d", &direccion_mov);
-    movimiento.direccion = direccion_mov;
+                    /* Guardar resultado en el historico binario */
+                    historico.idJugador = partida.jugador.id;
+                    strncpy(historico.nombreJugador, partida.jugador.nombre,
+                            sizeof(historico.nombreJugador) - 1);
+                    historico.nombreJugador[sizeof(historico.nombreJugador) - 1] = '\0';
+                    historico.puntos      = partida.jugador.puntos;
+                    historico.movimientos = partida.numero_turno;
+                    escribir_historico(&historico, RUTA_HISTORICO_BIN);
+                } else {
+                    printf("\n  Error al inicializar la partida.\n");
+                }
 
-    /// hay que encolar este movimiento
-    tCola colaMovimientos;
+                finalizar_partida(&partida);
 
-    crear_cola(&colaMovimientos);
-    insertar_en_cola(&colaMovimientos, &movimiento, sizeof(tMovimiento));
+                printf("\n  Presione Enter para continuar...");
+                while(getchar() != '\n');
+                break;
+            }
+            case 2:
+                /// --- VER RANKING ---
+                system("cls");
+                printf("  +-----------------------------------------+\n");
+                printf("  |              VER RANKING                |\n");
+                printf("  +-----------------------------------------+\n\n");
+                crear_y_mostrar_ranking(RUTA_HISTORICO_BIN);
+                printf("\n  Presione Enter para continuar...");
+                while(getchar() != '\n');
+                break;
 
-    /// hay que volcar los movimientos encolados en el tablero y actualizarlo
-    actualizar_tablero( &tablero, &colaMovimientos);
-    printf("Actualizando mapa....\n");
-    system("pause");
-    mostrar_caravana_txt(RUTA_CARAVANA);
+            case 3:
+                /// --- SALIR ---
+                system("cls");
+                printf("  Hasta la proxima!\n\n");
+                break;
 
-    ///========================================
-    destruir_tablero(&tablero);
+            default:
+                printf("\n  Opcion invalida. Intente nuevamente.\n");
+                printf("  Presione Enter para continuar...");
+                while(getchar() != '\n');
+                break;
+        }
+
+    } while(opcion != 3);
+
+    ///esto es para probar que se haya hecho bien
+    mostrar_historico(RUTA_HISTORICO_BIN);
+
     return 0;
 }
