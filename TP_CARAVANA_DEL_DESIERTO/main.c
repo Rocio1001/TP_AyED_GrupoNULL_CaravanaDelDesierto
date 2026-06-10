@@ -59,7 +59,7 @@ int main(){
     else
     {
         printf("  Error en inicio de sesion\n");
-        ///QUE HABRIA QUE HACER? (terminar el programa?)
+        ///que habria que hacer? (terminar el programa?)
     }
 
     system("pause");

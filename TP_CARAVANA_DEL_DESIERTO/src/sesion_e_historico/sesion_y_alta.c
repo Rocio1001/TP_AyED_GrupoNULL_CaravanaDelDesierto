@@ -1,11 +1,4 @@
-/* ******************************************************************
-Hay varias cosas que estoy muy seguro que se pueden optimizar o compactar o hacer de otra manera, pero no estoy seguro de como hacerlo.
-lo subo asi para que lo tengan, si quieren tomamos esto, si no, no. Por ahi tenian otra idea en mente de como hacerlo.
-Creo que se entiende bastante bien, pero cualquier cosa lo vemos, o lo hacemos de otra forma.
-Si vamos con esto lo corregimos y cambiamos lo que haya que cambiar y lo documento.
-
-Una cosa si q seguramente esta mal, son los codigos de ERROR y retorno, hay varios con el mismo numero, no se si puede hacer eso
-****************************************************************** */
+//TODAS las funciones que reciben un FILE *pf por parametro, lo reciben en modo lectura "rb"
 
 #include "../../include/sesion_e_historico/sesion_y_alta.h"
 
@@ -17,36 +10,31 @@ int compararJugadores(const void *a, const void *b)
     return strcmp(j1->nombre, j2->nombre);
 }
 
-///podria retornar cuantos regsitros cargo, para saber cual sería el siguiente id a asignar (? CONSULTAR, al final lo hice con ftell()/tam
-void cargarMaestroJugadores(tArbol *arbol, const char *nombArch)
+void cargarMaestroJugadores(tArbol *arbol, FILE *pf)
 {
     crearArbol( arbol );
 
-    cargarArchivoBinOrdenadoArbolBinBusq(arbol, nombArch, sizeof(tJugadorMaestro));
+    cargarArchivoBinOrdenadoAbiertoArbolBinBusq(arbol, pf, sizeof(tJugadorMaestro)); ///cargarlo normal no asi
 }
 
-int generarId(const char *nombArch)
+//devuelve el puntero al inicio
+int generarId(FILE *pf)
 {
     int cantReg;
-    FILE* pf;
-    pf = fopen(nombArch, "rb");
 
     if( !pf )
-        return 1; //el archivo tdv no existe => primer jugador
+        return 1; //el archivo tdv no existe => es primer jugador
 
     fseek(pf, 0, SEEK_END);
 
-    ///mientras no se borren registros esto funciona bien. Pq si hay 100 el ult ID es 101 si se borra por ejemplo el 20...
-    ///...quedan 100 registros de nuevo y el 100 quedaria duplicado
-    ///pero que haya visto no dice el TP q se deben poder borrar registros (creo)
-    ///cualquier cosa lo cambio
-    cantReg = ftell(pf) / sizeof(tJugadorMaestro); //cantidad de registros en el archivo c/u tiene un id de 1 a 0
+    cantReg = ftell(pf) / sizeof(tJugadorMaestro); //cantidad de registros en el archivo
 
-    fclose(pf);
+    rewind(pf); //devuelve el inicio
 
     return cantReg + 1;
 }
 
+//abre el archivo en wb y guarda el arbol de jugadoresMaestro en orden en el archivo
 int guardarMaestroJugadores (tArbol *arbol, const char* nombArch)
 {
     FILE *pf;
@@ -58,14 +46,17 @@ int guardarMaestroJugadores (tArbol *arbol, const char* nombArch)
     if(!pf)
         return ERROR_ARCH; //-1
 
-    crearArchOrdBinArbol(arbol, pf);
+    recorrerEnOrdenRecArbolBinBusq(arbol, 0, pf, escribirEnArchivo);
 
     fclose(pf);
 
     return TODO_OK; //1
 }
 
-int registrarJugador(tArbol *arbol, tJugador *jugador, const char *nombArch)
+//recibe el puntero a maestro en modo lectura solo para generar el nuevo ID
+//inserta el nuevo jugador en el arbol de tJugadoresMaestro
+//para que este sea guarde despues en el archivo maestro_jugadores.bin
+int registrarJugador(tArbol *arbol, tJugador *jugador, FILE *pf)
 {
     int id;
     char nombre[30];
@@ -80,9 +71,7 @@ int registrarJugador(tArbol *arbol, tJugador *jugador, const char *nombArch)
         return JUGADOR_ENCONTRADO; //2
 
     //generar Id
-    id = generarId(nombArch);
-    if( id == -1 )
-        return ERROR_ARCH; //-1
+    id = generarId(pf);
 
     //cargo en las structs
     jugador->id = id;
@@ -92,26 +81,28 @@ int registrarJugador(tArbol *arbol, tJugador *jugador, const char *nombArch)
     //el nombre ya queda desde antes
 
     //guardo el nuevo usuario en el arbol de forma ordenada
-    insertarRecArbolBinBusq(arbol, &jugadorReg, sizeof(tJugadorMaestro), compararJugadores);
+    if( insertarRecArbolBinBusq(arbol, &jugadorReg, sizeof(tJugadorMaestro), compararJugadores) != TODO_OK ) //puede ser SIN_MEM
+        return SIN_MEM; //-4
 
     return JUGADOR_CREADO; //1
 }
 
-int darJugadorDeAlta(tArbol *arbol, tJugador *jugador, const char *nombArch)
+
+int darJugadorDeAlta(tArbol *arbol, tJugador *jugador, FILE *pf)
 {
     int resultado;
 
     do{
         printf("Ingrese nombre de usuario: ");
 
-        resultado = registrarJugador(arbol, jugador, nombArch);
+        resultado = registrarJugador(arbol, jugador, pf);
 
         if(resultado == JUGADOR_ENCONTRADO)
             printf("El nombre ya existe, elija otro\n\n");
 
     }while(resultado == JUGADOR_ENCONTRADO);
 
-    return resultado;// 1 = JUGADOR_CREADO o -1 = ERROR_ARCH
+    return resultado;// 1 = JUGADOR_CREADO o -4 = SIN_MEM para nuevo nodo de tJugadorMaestro en arbol de jugadoresMaestro
 }
 
 
@@ -144,18 +135,44 @@ int cargarJugadorExistente(tArbol *arbol, tJugador *jugador)
     return JUGADOR_ENCONTRADO; //1
 }
 
+int altaYGuardar (tArbol *arbol, tJugador *jugador, FILE **pMaestro, const char *nombArch)
+{
+    if( darJugadorDeAlta(arbol, jugador, *pMaestro) != JUGADOR_CREADO )
+        return SESION_ERROR; //-2
+
+    if( *pMaestro ) ///(funciona) pero no se si podemos usar FILE**, pero si no iniciar_sesion queda gigante y con codigo repetido
+    {
+        fclose( *pMaestro );
+        *pMaestro = NULL;
+    }
+
+    if(guardarMaestroJugadores(arbol, nombArch) != TODO_OK )
+        return SESION_ERROR;
+
+    return SESION_ALTA;
+}
+
 ///iniciar_sesion() seguro que se puede optimizar / compactar más
 int iniciar_sesion (tJugador *jugador, const char *nombArchMaestro)
 {
-    int opcion, resultado;
+    int opcion, resultado, valorRetorno, salir;
     char buffer[16];
     tArbol maestroJugadores;
+    FILE *pMaestro;
 
-    //cargar maestroJugadores a un ABB
-    cargarMaestroJugadores(&maestroJugadores, nombArchMaestro); //carga el archivo de jugadores a un arbol
+    pMaestro = fopen(nombArchMaestro, "rb");
 
-    do
-    {
+    valorRetorno = SESION_ERROR; ///valor por defecto
+    salir = 0;
+
+    //si hay archivo cargar maestroJugadores a un ABB
+    if(pMaestro)
+        cargarMaestroJugadores(&maestroJugadores, pMaestro);
+    //si no hay archivo lo crea (y el jugador que se de alta va a ser el primero de todos)
+    else
+        crearArbol(&maestroJugadores);
+
+    do{
         mostrar_inicioSesion_1();
         fgets(buffer, sizeof(buffer), stdin);
         opcion = atoi(buffer);
@@ -164,68 +181,42 @@ int iniciar_sesion (tJugador *jugador, const char *nombArchMaestro)
         {
             //Es nuevo
             case 1:
-                resultado = darJugadorDeAlta(&maestroJugadores, jugador, nombArchMaestro); // 1 o -1
-                if( resultado == JUGADOR_CREADO )
-                {
-                    //si lo pudo crear, lo intenta guardar, si falla al guardar...
-                    if( guardarMaestroJugadores(&maestroJugadores, nombArchMaestro) != TODO_OK )
-                    {
-                        vaciarArbol(&maestroJugadores);
-                        return SESION_ERROR; //-1
-                    }
-                    //...si sale bien
-                    vaciarArbol(&maestroJugadores);
-                    return SESION_ALTA; //1
-                }
-                //si directamente no lo pudo crear...
-                vaciarArbol(&maestroJugadores);
-                return SESION_ERROR;//-1
+                valorRetorno = altaYGuardar(&maestroJugadores, jugador, &pMaestro, nombArchMaestro);
+                salir = 1;
                 break;
 
             case 2:
-                resultado = cargarJugadorExistente(&maestroJugadores, jugador);
-                while( !resultado ) //no se econtro
+                resultado = cargarJugadorExistente(&maestroJugadores, jugador); //se busca
+                //no se econtro
+                while( resultado == JUGADOR_NO_ENCONTRADO) //== 0
                 {
                     system("cls");
-                    mostrar_inicioSesion_2();
 
+                    mostrar_inicioSesion_2();
                     fgets(buffer, sizeof(buffer), stdin);
                     opcion = atoi(buffer);
 
                     if(opcion == 1)
                     {
-                        resultado = cargarJugadorExistente(&maestroJugadores, jugador);
+                        resultado = cargarJugadorExistente(&maestroJugadores, jugador); //se busca, si encuentra =1 si no =0
                     }
-                    else if (opcion == 2) ///no se como hacer para compactarla mas, pq esto es lo mismo que case 1:
+                    else if (opcion == 2) //darse de alta (igual a case 1)
                     {
-                        resultado = darJugadorDeAlta(&maestroJugadores, jugador, nombArchMaestro);
-                        if(resultado == JUGADOR_CREADO)
-                        {
-                            if( guardarMaestroJugadores(&maestroJugadores, nombArchMaestro) != TODO_OK ) //codigo de error de archivo o arbol
-                            {
-                                vaciarArbol(&maestroJugadores);
-                                return SESION_ERROR; //-1
-                            }
-                            else
-                            {
-                                vaciarArbol(&maestroJugadores);
-                                return SESION_ALTA; //1
-                            }
-                        }
-                        //si directamente no lo pudo crear...
-                        vaciarArbol(&maestroJugadores);
-                        return SESION_ERROR;//-1
+                        valorRetorno = altaYGuardar(&maestroJugadores, jugador, &pMaestro, nombArchMaestro);
+                        salir = 1;
+                        break; //corta el while
                     }
                     else
                     {
                        printf("  Opcion invalida...\n");
                        system("pause");
                     }
-
+                }//fin de while
+                if(resultado)
+                {
+                    valorRetorno = SESION_ALTA;
+                    salir = 1;
                 }
-
-                vaciarArbol(&maestroJugadores);
-                return SESION_ALTA;
                 break;
 
             default:
@@ -234,6 +225,11 @@ int iniciar_sesion (tJugador *jugador, const char *nombArchMaestro)
                 while(getchar() != '\n');
                 break;
         }
+    }while( !salir );
 
-    }while(1);
+    if(pMaestro)
+        fclose(pMaestro);
+
+    vaciarArbol(&maestroJugadores);
+    return valorRetorno;
 }

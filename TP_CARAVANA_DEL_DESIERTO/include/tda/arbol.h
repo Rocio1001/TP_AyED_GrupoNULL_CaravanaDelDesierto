@@ -79,7 +79,7 @@ unsigned leerDesdeArchivoBin(void ** pd, void * pf,unsigned pos, void * params);
 int cargarArchivoBinOrdenadoAbiertoArbolBinBusq(tArbol *pa, FILE * pf, size_t tamInfo);//si el archivo binario fue previamente abierto, usamos lo siguiente. Es una función envoltorio que prepara el llamado a la recursiva
 int cargarArchivoBinOrdenadoArbolBinBusq(tArbol *p, const char * path,unsigned tamInfo);//si el archivo binario no fue abierto, usamos lo siguiente. Es una función envoltorio que prepara el llamado a la recursiva
 
-///agus
-void crearArchOrdBinArbol(tArbol *p, FILE* pf);
+/// nueva para sesion_y_alta
+void escribirEnArchivo(void *info, size_t tam, size_t nivel, void *params);
 
 #endif // ARBOL_H_INCLUDED

@@ -268,17 +268,11 @@ int cargarArchivoBinOrdenadoArbolBinBusq(tArbol *p, const char * path,unsigned t
     return r;
 }
 
-/// AGUS
-void crearArchOrdBinArbol(tArbol *p, FILE* pf)
+/// nueva para sesion_y_alta
+void escribirEnArchivo(void *info, size_t tam, size_t nivel, void *params)
 {
-    if( !*p )
-        return;
+    FILE *pf = (FILE*)params;
 
-    ///RECORRE EL ABB EN ORDEN (MENOR A MAYOR) Y VA GUARDANDO EL EL ARCHIVO BINARIO
-
-    crearArchOrdBinArbol( &(*p)->izq, pf );
-
-    fwrite( (*p)->info, (*p)->tamInfo, 1, pf );
-
-    crearArchOrdBinArbol( &(*p)->der, pf );
+    fwrite(info, tam, 1, pf);
 }
+
