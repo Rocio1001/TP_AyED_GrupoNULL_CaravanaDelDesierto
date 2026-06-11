@@ -2,6 +2,7 @@
 #define RANKING_H_INCLUDED
 
 #include "../tda/lista_simple.h"
+#include "../sesion_e_historico/historico.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,18 +18,20 @@ typedef struct{
     int partidasJugadas;
 }tRanking;
 
-///creacion, visualizaci髇 y destrucci髇 del ranking
+
+///creacion, visualizaci贸n y destrucci贸n del ranking
 void crear_y_mostrar_ranking(const char *pathHistorico);
 
-///cmp de inserci髇
+///cmp de inserci贸n
 int cmp_id(const void* idA, const void* idB);
 ///cmp de ordenamiento
 int cmp_criterio_ranking(const void* a, const void* b);
 ///accion al insertar
 void acumular_ranking(void** datoEnLista, size_t* tamDato, const void* datoAAcumular, size_t tamDatoAcumular);
-///acci髇 al recorrer ranking
+///acci贸n al recorrer ranking
 void imprimir_ranking(const void* dato, size_t tamDato, void* params);
 
 
 
 #endif // RANKING_H_INCLUDED
+ 

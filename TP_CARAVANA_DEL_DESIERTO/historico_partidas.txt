@@ -1,8 +1,0 @@
-1|Juan Perez|5|2
-1|Juan Perez|5|1
-2|MariaG|1000|10
-7|Jugador Fantasma|20|5
-4|Pepe|20|10
-4|Pepe|40|5
-6|Lucia|10|2
-7|Jugador Fantasma|40|20

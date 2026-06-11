@@ -1,40 +1,50 @@
 #ifndef MOVIMIENTO_H_INCLUDED
 #define MOVIMIENTO_H_INCLUDED
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-///como tablero incluye a jugador.h y bandido.h, podemos acceder a ellos solo incluyendo tablero.h
+
 #include "tablero.h"
+#include "../tda/cola_dinamica.h"
 
-///#include "../tda/cola_dinamica.h"
-/*
-    dejo comentado el include "tda_cola" dado que me tira error por re-definición de tNodo, dado que en el main incluyo al ranking.h, el cuál incluye a lista.h y ahí, se define tNodo,
-    generando una re-definición del mismo en el main
-
-    cuando desarrollemos este modulo, analizar y decidir cómo manejarlo.
-
-*/
+// Tipos de entidad que pueden moverse
 typedef enum{
-     TIPO_JUGADOR,
-     TIPO_BANDIDO
+    TIPO_JUGADOR,
+    TIPO_BANDIDO
 }tTipoEntidad;
 
-//movimiento a encolar
+// Movimiento que se encola antes de aplicarse
 typedef struct{
-    tTipoEntidad tipo; //jugador o bandido
-    void* entidad; //puntero a jugador o bandido
-    int pasos; //cantidad que se movi� la entidad (lo que sale ens el dado)
-    int direccion; // 1 (avanzo), -1(retrocedo)
+    tTipoEntidad tipo;
+    void* entidad;
+    int pasos;
+    int direccion; // 1 = adelante, -1 = atras
 }tMovimiento;
 
-//tipo de dato que va a contener el log de movimientos de la partida
+// Registro de un movimiento para el log de la partida
 typedef struct{
     int id;
     int nroMov;
-    char descripcion[3]; //FX o BX o NT(en caso de que haya sido un movimiento bloqueado)
+    char descripcion[3]; // "FX", "BX" o "NT"
 }tLogMovimientos;
+
+
+// --- Validacion de turno ---
+int turno_valido(const tJugador* jugador);
+
+// --- Dado y direccion ---
+int tirar_dado(void);
+int elegir_direccion(void);
+
+// --- Cola: jugador ---
+void encolar_movimiento(tCola* cola, tJugador* jugador, int pasos, int direccion);
+int  desencolar_y_mover(tCola* cola, tTablero* tablero, int* gano);
+
+// --- Cola: bandidos ---
+void procesar_turno_bandidos(tCola* cola,
+                              tBandido* bandidos, int cantBandidos,
+                              tJugador* jugador, tTablero* tablero);
 
 
 #endif // MOVIMIENTO_H_INCLUDED

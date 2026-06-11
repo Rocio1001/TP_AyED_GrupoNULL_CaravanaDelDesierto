@@ -13,9 +13,8 @@ void vaciar_cola(tCola* pc){
     }
     pc->ult = NULL;
 }
-
 int cola_llena(const tCola* pc, size_t tam){
-    tNodo* aux = (tNodo*)malloc(sizeof(tNodo));
+    tNodo* aux = malloc(sizeof(tNodo));
     void* info = malloc(tam);
     free(aux);
     free(info);
@@ -24,10 +23,9 @@ int cola_llena(const tCola* pc, size_t tam){
 int cola_vacia(const tCola* pc){
     return !pc->pri ? COLA_VACIA : TODO_OK;
 }
-
 int insertar_en_cola(tCola* pc, const void* pd, size_t tam){
     tNodo* nue;
-    nue = (tNodo*)malloc(sizeof(tNodo));
+    nue = malloc(sizeof(tNodo));
     if(!nue)
         return COLA_LLENA;
     nue->info = malloc(tam);
@@ -65,7 +63,7 @@ int sacar_de_cola(tCola* pc, void* pd, size_t tam){
     return TODO_OK;
 }
 int ver_frente_cola(const tCola* pc, void* pd, size_t tam){
-    tNodo* aux;
+        tNodo* aux;
     if(!pc->pri)
         return COLA_VACIA;
 
