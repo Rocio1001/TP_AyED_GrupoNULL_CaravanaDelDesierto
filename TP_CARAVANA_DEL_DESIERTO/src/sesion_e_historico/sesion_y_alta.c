@@ -2,234 +2,260 @@
 
 #include "../../include/sesion_e_historico/sesion_y_alta.h"
 
-int compararJugadores(const void *a, const void *b)
-{
-    const tJugadorMaestro *j1 = (const tJugadorMaestro *)a;
-    const tJugadorMaestro *j2 = (const tJugadorMaestro *)b;
+int cmp_jugadores(const void *a, const void *b){
+    const tIndice *j1 = (const tIndice *)a;
+    const tIndice *j2 = (const tIndice *)b;
 
-    return strcmp(j1->nombre, j2->nombre);
+    return strcmp(j1->clave.nombre, j2->clave.nombre);
 }
 
-void cargarMaestroJugadores(tArbol *arbol, FILE *pf)
-{
-    crearArbol( arbol );
+///***************************************************************
+void cargar_arbol_indice_maestro_jugadores(tArbol *arbol, FILE **pf){
+    tJugadorMaestro jugadorAux;
+    tIndice indice;
+    size_t pos;
 
-    cargarArchivoBinOrdenadoAbiertoArbolBinBusq(arbol, pf, sizeof(tJugadorMaestro)); ///cargarlo normal no asi
+    crear_arbol( arbol );
+    rewind(*pf); //just buenas practica
+
+    fread(&jugadorAux,sizeof(tJugadorMaestro),1,*pf);
+    pos = 0;
+    while(!feof(*pf)){
+        strcpy(indice.clave.nombre,jugadorAux.nombre);
+        indice.valor = pos;
+
+        insertar_rec_arbol(arbol,&indice,sizeof(tIndice),cmp_jugadores);
+        pos++;
+        fread(&jugadorAux,sizeof(tJugadorMaestro),1,*pf);
+    }
+    //el archivo se cierra luego de su llamado
 }
 
-//devuelve el puntero al inicio
-int generarId(FILE *pf)
-{
-    int cantReg;
-
-    if( !pf )
-        return 1; //el archivo tdv no existe => es primer jugador
-
-    fseek(pf, 0, SEEK_END);
-
-    cantReg = ftell(pf) / sizeof(tJugadorMaestro); //cantidad de registros en el archivo
-
-    rewind(pf); //devuelve el inicio
-
-    return cantReg + 1;
-}
-
-//abre el archivo en wb y guarda el arbol de jugadoresMaestro en orden en el archivo
-int guardarMaestroJugadores (tArbol *arbol, const char* nombArch)
-{
+int posicion_final_en_archivo(const char *nombArch){
+    int cantReg = 0;
     FILE *pf;
 
-    if(!*arbol)
-        return SIN_INICIALIZAR; //-3
 
-    pf = fopen(nombArch, "wb");
+    pf = fopen(nombArch, "rb");
+
     if(!pf)
-        return ERROR_ARCH; //-1
+        return 0; // El archivo no existe => es el primer jugador
 
-    recorrerEnOrdenRecArbolBinBusq(arbol, 0, pf, escribirEnArchivo);
+    fseek(pf, 0, SEEK_END);
+    cantReg = ftell(pf) / sizeof(tJugadorMaestro); // Cantidad de registros
 
     fclose(pf);
-
-    return TODO_OK; //1
+    return cantReg;
 }
 
-//recibe el puntero a maestro en modo lectura solo para generar el nuevo ID
-//inserta el nuevo jugador en el arbol de tJugadoresMaestro
-//para que este sea guarde despues en el archivo maestro_jugadores.bin
-int registrarJugador(tArbol *arbol, tJugador *jugador, FILE *pf)
-{
-    int id;
-    char nombre[30];
-    tJugadorMaestro jugadorReg;
+void buscar_en_maestro(tJugadorMaestro *jugador, tIndice *indice, const char *nombArch){
+    FILE *pf ;
 
-    fgets(nombre, sizeof(nombre), stdin);
-    nombre[strcspn(nombre, "\n")] = '\0';
+    pf= fopen(nombArch, "rb");
 
-    strcpy(jugadorReg.nombre, nombre);
-
-    if ( buscarNodoArbolBinBusq(arbol, &jugadorReg, compararJugadores) != NULL )
-        return JUGADOR_ENCONTRADO; //2
-
-    //generar Id
-    id = generarId(pf);
-
-    //cargo en las structs
-    jugador->id = id;
-    strcpy(jugador->nombre, nombre);
-
-    jugadorReg.id = id;
-    //el nombre ya queda desde antes
-
-    //guardo el nuevo usuario en el arbol de forma ordenada
-    if( insertarRecArbolBinBusq(arbol, &jugadorReg, sizeof(tJugadorMaestro), compararJugadores) != TODO_OK ) //puede ser SIN_MEM
-        return SIN_MEM; //-4
-
-    return JUGADOR_CREADO; //1
+    if (pf) {
+        fseek(pf, indice->valor * sizeof(tJugadorMaestro), SEEK_SET);
+        fread(jugador, sizeof(tJugadorMaestro), 1, pf); // ¡Corregido el tamaño!
+        fclose(pf);
+    }
 }
 
-
-int darJugadorDeAlta(tArbol *arbol, tJugador *jugador, FILE *pf)
-{
-    int resultado;
-
-    do{
-        printf("Ingrese nombre de usuario: ");
-
-        resultado = registrarJugador(arbol, jugador, pf);
-
-        if(resultado == JUGADOR_ENCONTRADO)
-            printf("El nombre ya existe, elija otro\n\n");
-
-    }while(resultado == JUGADOR_ENCONTRADO);
-
-    return resultado;// 1 = JUGADOR_CREADO o -4 = SIN_MEM para nuevo nodo de tJugadorMaestro en arbol de jugadoresMaestro
-}
-
-
-int cargarJugadorExistente(tArbol *arbol, tJugador *jugador)
-{
+///arreglar, agregar que busque en el archivo para buscar el id y nombre
+int cargar_jugador_existente(tArbol *arbol, tJugador *jugador, const char *nombArch){
     char nombre[30];
     tNodoA **ppRes;
     tJugadorMaestro jugadorAux;
-    tJugadorMaestro *reg;
+    tIndice *indiceEncontrado;
+    tIndice indice;
 
     printf("Ingrese nombre de usuario: ");
-
     fgets(nombre, sizeof(nombre), stdin);
     nombre[strcspn(nombre, "\n")] = '\0';
 
-    strcpy(jugadorAux.nombre, nombre);
+    strcpy(indice.clave.nombre, nombre);
 
-    ppRes = buscarNodoArbolBinBusq(arbol, &jugadorAux, compararJugadores);
+    ppRes = buscar_nodo_arbol(arbol, &indice, cmp_jugadores);
 
     if( ppRes == NULL )
-        return JUGADOR_NO_ENCONTRADO; //0
+        return JUGADOR_NO_ENCONTRADO; //0, no existe en el arbol
+    ///si != NULL es pq lo encontro =>
 
-    //si != NULL es pq lo encontro =>
 
-    reg = (tJugadorMaestro*)(*ppRes)->info;
+    // Recuperamos el indice completo que está en el árbol
+    indiceEncontrado = (tIndice*)((*ppRes)->info);
 
-    jugador->id = reg->id;
-    strcpy(jugador->nombre, reg->nombre);
+   // Buscamos y recuperamos en el archivo maestro
+    buscar_en_maestro(&jugadorAux, indiceEncontrado, nombArch);
+
+
+    jugador->id = jugadorAux.id;
+    strcpy(jugador->nombre, jugadorAux.nombre);
 
     return JUGADOR_ENCONTRADO; //1
 }
+///*********************************************
+int registar_jugador(tArbol *arbol, tJugadorMaestro *jugador, const char *nombArch){
+    char nombre[30];
+    tIndice indice;
 
-int altaYGuardar (tArbol *arbol, tJugador *jugador, FILE **pMaestro, const char *nombArch)
-{
-    if( darJugadorDeAlta(arbol, jugador, *pMaestro) != JUGADOR_CREADO )
-        return SESION_ERROR; //-2
+    fgets(nombre, sizeof(nombre), stdin);
+    nombre[strcspn(nombre, "\n")] = '\0';
+    strcpy(indice.clave.nombre, nombre);
 
-    if( *pMaestro ) ///(funciona) pero no se si podemos usar FILE**, pero si no iniciar_sesion queda gigante y con codigo repetido
-    {
-        fclose( *pMaestro );
-        *pMaestro = NULL;
+    if ( buscar_nodo_arbol(arbol, &indice, cmp_jugadores) != NULL )
+        return JUGADOR_ENCONTRADO; // 2
+
+    // Calculamos posición abriendo el archivo atómicamente
+    indice.valor = posicion_final_en_archivo(nombArch);
+
+    jugador->id = indice.valor + 1; // ID = POS+1
+    strcpy(jugador->nombre, nombre);
+
+    if( insertar_rec_arbol(arbol, &indice, sizeof(tIndice), cmp_jugadores) != TODO_OK )
+        return SIN_MEM; //-4
+
+    return JUGADOR_CREADO; // 1
+}
+
+int dar_alta_jugador_arbol(tArbol *arbol, tJugadorMaestro *jugador, const char *nombArch){
+    int resultado;
+    do{
+        printf("Ingrese nombre de usuario: ");
+        resultado = registar_jugador(arbol, jugador, nombArch);
+
+        if(resultado == JUGADOR_ENCONTRADO){
+            printf("El nombre ya existe, elija otro\n\n");
+            printf("  Presione Enter para continuar...");
+            while(getchar() != '\n');
+        }
+
+    }while(resultado == JUGADOR_ENCONTRADO);
+
+    return resultado;
+}
+
+int dar_alta_jugador_maestro(const char* pathMaestro, tJugadorMaestro *jugador){
+    // "ab" garantiza crearlo si no existe, o poner el puntero al final si existe
+    FILE *pf;
+    pf = fopen(pathMaestro, "ab");
+    if(!pf){
+        printf("Hubo problemas al abrir el archivo %s\n", pathMaestro);
+        return ERROR_ARCH;
     }
 
-    if(guardarMaestroJugadores(arbol, nombArch) != TODO_OK )
+    // la apertura "ab" garantiza ecribir al final, por defecto
+    fwrite(jugador, sizeof(tJugadorMaestro), 1, pf);
+    fclose(pf);
+
+    return SESION_ALTA;
+}
+
+int alta_jugador (tArbol *arbol, tJugadorMaestro *jugador, const char *nombArch){
+    // Registra e inserta en el Árbol
+    if( dar_alta_jugador_arbol(arbol, jugador, nombArch) != JUGADOR_CREADO )
+        return SESION_ERROR; //-2
+
+    // Persiste en el archivo Maestro
+    if( dar_alta_jugador_maestro(nombArch, jugador) != SESION_ALTA )
         return SESION_ERROR;
 
     return SESION_ALTA;
 }
 
-///iniciar_sesion() seguro que se puede optimizar / compactar más
-int iniciar_sesion (tJugador *jugador, const char *nombArchMaestro)
-{
+///envoltorio
+int procesar_alta_y_mapeo(tArbol *arbol, tJugador *jugador, tJugadorMaestro *jugadorSesion, const char *nombArch) {
+    int valorRetorno = alta_jugador(arbol, jugadorSesion, nombArch);
+
+    if (valorRetorno == SESION_ALTA) {
+        jugador->id = jugadorSesion->id;
+        strcpy(jugador->nombre, jugadorSesion->nombre);
+    }
+    return valorRetorno;
+}
+
+
+///iniciar_sesion(), orquestador
+int iniciar_sesion (tJugador *jugador, const char *nombArchMaestro){
     int opcion, resultado, valorRetorno, salir;
     char buffer[16];
-    tArbol maestroJugadores;
+    tArbol arbolIndiceJugadores;
     FILE *pMaestro;
-
-    pMaestro = fopen(nombArchMaestro, "rb");
+    tJugadorMaestro jugadorSesion;
 
     valorRetorno = SESION_ERROR; ///valor por defecto
     salir = 0;
 
-    //si hay archivo cargar maestroJugadores a un ABB
-    if(pMaestro)
-        cargarMaestroJugadores(&maestroJugadores, pMaestro);
-    //si no hay archivo lo crea (y el jugador que se de alta va a ser el primero de todos)
-    else
-        crearArbol(&maestroJugadores);
+    // === CARGA INICIAL ATÓMICA ===
+    pMaestro = fopen(nombArchMaestro, "rb");
+    if(pMaestro) { //si hay archivo, cargo el ABB
+        cargar_arbol_indice_maestro_jugadores(&arbolIndiceJugadores, &pMaestro);
+        fclose(pMaestro); // cerramos
+    } else {//si no hay archivo lo crea (y el jugador que se de alta va a ser el primero de todos)
+        crear_arbol(&arbolIndiceJugadores);
+    }
+
 
     do{
+        system("cls");
         mostrar_inicioSesion_1();
         fgets(buffer, sizeof(buffer), stdin);
         opcion = atoi(buffer);
 
         switch(opcion)
         {
-            //Es nuevo
-            case 1:
-                valorRetorno = altaYGuardar(&maestroJugadores, jugador, &pMaestro, nombArchMaestro);
-                salir = 1;
-                break;
-
-            case 2:
-                resultado = cargarJugadorExistente(&maestroJugadores, jugador); //se busca
-                //no se econtro
-                while( resultado == JUGADOR_NO_ENCONTRADO) //== 0
-                {
-                    system("cls");
-
-                    mostrar_inicioSesion_2();
-                    fgets(buffer, sizeof(buffer), stdin);
-                    opcion = atoi(buffer);
-
-                    if(opcion == 1)
-                    {
-                        resultado = cargarJugadorExistente(&maestroJugadores, jugador); //se busca, si encuentra =1 si no =0
-                    }
-                    else if (opcion == 2) //darse de alta (igual a case 1)
-                    {
-                        valorRetorno = altaYGuardar(&maestroJugadores, jugador, &pMaestro, nombArchMaestro);
-                        salir = 1;
-                        break; //corta el while
-                    }
-                    else
-                    {
-                       printf("  Opcion invalida...\n");
-                       system("pause");
-                    }
-                }//fin de while
-                if(resultado)
-                {
-                    valorRetorno = SESION_ALTA;
+            /// -----ES NUEVO-----
+                case 1:
+                    valorRetorno = procesar_alta_y_mapeo(&arbolIndiceJugadores, jugador, &jugadorSesion, nombArchMaestro);
                     salir = 1;
-                }
                 break;
+            /// -----JUGADOR YA TIENE USUARIO-----
+                case 2:
+                    resultado = cargar_jugador_existente(&arbolIndiceJugadores, jugador, nombArchMaestro);
+
+                    // MIENTRAS NO SE ENCUENTRE EL JUGADOR
+                    while( resultado == JUGADOR_NO_ENCONTRADO )
+                    {
+                        system("cls");
+                        mostrar_inicioSesion_2(); // Submenú de error
+                        fgets(buffer, sizeof(buffer), stdin);
+                        opcion = atoi(buffer);
+
+                        if(opcion == 1) {
+                            //  Reintentar
+                            resultado = cargar_jugador_existente(&arbolIndiceJugadores, jugador, nombArchMaestro);
+                        }
+                        else if (opcion == 2) {
+                            //  Darse de alta, para no repetir codigo del case 1, llamamos a una envoltorio
+                            valorRetorno = procesar_alta_y_mapeo(&arbolIndiceJugadores, jugador, &jugadorSesion, nombArchMaestro);
+                            salir = 1;
+                            resultado = JUGADOR_ENCONTRADO;
+                        }
+                        else {
+                           printf("  Opcion invalida...\n");
+                           system("pause");
+                        }
+                    }
+                // Si el while terminó porque lo encontró en un reintento (resultado == JUGADOR_ENCONTRADO)
+                    if(resultado == JUGADOR_ENCONTRADO) {
+                        valorRetorno = SESION_ALTA;
+                        salir = 1;
+                    }
+                break;
+            case 3:
+                /// --- SALIR ---
+                    system("cls");
+                    printf("  Hasta la proxima!\n\n");
+                break;
+
 
             default:
-                printf("\n  Opcion invalida. Intente nuevamente.\n");
-                printf("  Presione Enter para continuar...");
-                while(getchar() != '\n');
+                    printf("\n  Opcion invalida. Intente nuevamente.\n");
+                    printf("  Presione Enter para continuar...");
+                    while(getchar() != '\n');
                 break;
         }
-    }while( !salir );
+    }while( opcion != 3 && !salir );
 
-    if(pMaestro)
-        fclose(pMaestro);
-
-    vaciarArbol(&maestroJugadores);
+    vaciar_arbol(&arbolIndiceJugadores);
     return valorRetorno;
 }

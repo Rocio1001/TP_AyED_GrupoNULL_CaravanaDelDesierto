@@ -51,27 +51,31 @@ int main(){
 
     srand((unsigned int)time(NULL));
 
+
+/// -------------------- INICIO SESIÓN -------------------------
     resultado = iniciar_sesion(&partida.jugador, RUTA_MAESTRO_JUGADORES_BIN);
     if(resultado == SESION_ALTA)
     {
         printf("  Usuario cargado con ID: %d\n", partida.jugador.id);
     }
-    else
-    {
-        printf("  Error en inicio de sesion\n");
-        ///que habria que hacer? (terminar el programa?)
+    else{
+        ///fin programa;
+        printf("  Cerrando el juego...\n");
+        return TODO_OK;
     }
 
     system("pause");
-
+/// ------------- JUEGO CARAVANA DEL DESIERTO --------------------
     do {
         system("cls");
 
         mostrar_opciones();
         //solo para ver si estaba seleccionando bien
-        printf("\n");
+        ///borrar posteriormente
+        printf("\nEsto es para probar que este todo oki\n");
         printf("Jugador ID: %d\n",partida.jugador.id);
         printf("Jugador Nombre: %s\n",partida.jugador.nombre);
+        printf("\n");
 
         fgets(buffer, sizeof(buffer), stdin);
         opcion = atoi(buffer);
