@@ -70,7 +70,7 @@ int cargar_jugador_existente(tArbol *arbol, tJugador *jugador, const char *nombA
     tIndice *indiceEncontrado;
     tIndice indice;
 
-    printf("Ingrese nombre de usuario: ");
+    printf("  Ingrese nombre de usuario: ");
     fgets(nombre, sizeof(nombre), stdin);
     nombre[strcspn(nombre, "\n")] = '\0';
 
@@ -122,11 +122,11 @@ int registar_jugador(tArbol *arbol, tJugadorMaestro *jugador, const char *nombAr
 int dar_alta_jugador_arbol(tArbol *arbol, tJugadorMaestro *jugador, const char *nombArch){
     int resultado;
     do{
-        printf("Ingrese nombre de usuario: ");
+        printf("  Ingrese nombre de usuario: ");
         resultado = registar_jugador(arbol, jugador, nombArch);
 
         if(resultado == JUGADOR_ENCONTRADO){
-            printf("El nombre ya existe, elija otro\n\n");
+            printf("  El nombre ya existe, elija otro\n\n");
             printf("  Presione Enter para continuar...");
             while(getchar() != '\n');
         }
@@ -141,7 +141,7 @@ int dar_alta_jugador_maestro(const char* pathMaestro, tJugadorMaestro *jugador){
     FILE *pf;
     pf = fopen(pathMaestro, "ab");
     if(!pf){
-        printf("Hubo problemas al abrir el archivo %s\n", pathMaestro);
+        printf(" Hubo problemas al abrir el archivo %s\n", pathMaestro);
         return ERROR_ARCH;
     }
 

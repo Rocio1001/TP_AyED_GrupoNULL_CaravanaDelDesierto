@@ -10,10 +10,11 @@ int inicializar_partida(tPartida* partida, const char* rutaConfig){
     partida->bandidos    = NULL;
     partida->cantBandidos = 0;
 
+    crear_tablero(&partida->tablero);
+
     if(preparar_configuracion(rutaConfig, &config) == CONFIG_ERROR)
         return TABLERO_ERROR;
 
-    crear_tablero(&partida->tablero);
 
     if(construir_tablero(&partida->tablero, &partida->bandidos, &partida->jugador, &config) != TABLERO_GENERADO){
         destruir_tablero(&partida->tablero);

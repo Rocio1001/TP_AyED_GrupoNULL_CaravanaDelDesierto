@@ -42,10 +42,10 @@ int main(){
         mostrar_opciones();
         //solo para ver si estaba seleccionando bien
         ///borrar posteriormente
-        printf("\nEsto es para probar que este todo oki\n");
+      /*  printf("\nEsto es para probar que este todo oki\n");
         printf("Jugador ID: %d\n",partida.jugador.id);
         printf("Jugador Nombre: %s\n",partida.jugador.nombre);
-        printf("\n");
+        printf("\n");*/
 
         fgets(buffer, sizeof(buffer), stdin);
         opcion = atoi(buffer);
@@ -53,28 +53,30 @@ int main(){
         switch(opcion){
             case 1:{
 
-                system("cls");
-                printf("  Preparando configuracion...\n\n");
+                    system("cls");
+                    printf("  Preparando configuracion...\n\n");
 
-                if(inicializar_partida(&partida, RUTA_CONFIG) == TODO_OK){
-                    ejecutar_partida(&partida);
+                    if(inicializar_partida(&partida, RUTA_CONFIG) == TODO_OK){
+                        ejecutar_partida(&partida);
 
-                    /* Guardar resultado en el historico binario */
-                    historico.idJugador = partida.jugador.id;
-                    strncpy(historico.nombreJugador, partida.jugador.nombre,
-                            sizeof(historico.nombreJugador) - 1);
-                    historico.nombreJugador[sizeof(historico.nombreJugador) - 1] = '\0';
-                    historico.puntos      = partida.jugador.puntos;
-                    historico.movimientos = partida.numero_turno;
-                    escribir_historico(&historico, RUTA_HISTORICO_BIN);
-                } else {
-                    printf("\n  Error al inicializar la partida.\n");
-                }
+                        /* Guardar resultado en el historico binario */
+                        historico.idJugador = partida.jugador.id;
+                        strncpy(historico.nombreJugador, partida.jugador.nombre,
+                                sizeof(historico.nombreJugador) - 1);
+                        historico.nombreJugador[sizeof(historico.nombreJugador) - 1] = '\0';
+                        historico.puntos      = partida.jugador.puntos;
+                        historico.movimientos = partida.numero_turno;
+                        escribir_historico(&historico, RUTA_HISTORICO_BIN);
+                    } else {
+                        printf("\n  Error al inicializar la partida.\n");
+                        printf("  Cerrando juego...\n");
+                        opcion = 3; //salimos
+                    }
 
-                finalizar_partida(&partida);
+                    finalizar_partida(&partida);
 
-                printf("\n  Presione Enter para continuar...");
-                while(getchar() != '\n');
+                    printf("\n  Presione Enter para continuar...");
+                    while(getchar() != '\n');
                 break;
             }
             case 2:
