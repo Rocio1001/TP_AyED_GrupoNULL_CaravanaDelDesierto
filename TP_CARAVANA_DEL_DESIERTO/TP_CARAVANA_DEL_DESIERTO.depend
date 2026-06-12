@@ -151,7 +151,7 @@
 	<stdlib.h>
 	"nodo.h"
 
-1781237422 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
+1781237518 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -628,13 +628,13 @@
 	"../entidad/jugador.h"
 	"../juego/menu.h"
 
-1781235994 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sesion_e_historico\historico.c
+1781237702 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sesion_e_historico\historico.c
 	"../../include/sesion_e_historico/historico.h"
 
 1781237465 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sesion_e_historico\sesion_y_alta.c
 	"../../include/sesion_e_historico/sesion_y_alta.h"
 
-1781233914 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sistema_de_puntos\ranking.c
+1781237900 source:d:\unlam\cursando\3640-algoritmos\tp_ayed_gruponull_caravanadeldesierto\tp_caravana_del_desierto\src\sistema_de_puntos\ranking.c
 	"../../include/sistema_de_puntos/ranking.h"
 
 1781232774 source:c:\users\martin palacios\desktop\tp_caravana_del_desierto\tp_caravana_del_desierto\main.c

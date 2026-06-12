@@ -20,7 +20,7 @@ void mostrar_historico(const char* file_name) {
     FILE* pArchivo = fopen(file_name, "rb");
 
     if(pArchivo == NULL) {
-        printf("Error al abrir el archivo de %s porque no existe aun\n", file_name);
+        printf("\nError al abrir el archivo de %s porque no existe aun\n", file_name);
         return;
     }
 

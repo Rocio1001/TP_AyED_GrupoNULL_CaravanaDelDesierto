@@ -1,14 +1,14 @@
 === ESTADO DE LA CARAVANA ===
 
-[I J]
+[I]
 [P O]
-[V O]
-[T P]
+[T]
 [O]
-[O P B]
 [O P]
-[O P B]
-[T P]
-[F]
+[O]
+[O]
+[O]
+[T]
+[F J]
 
 =============================

@@ -51,13 +51,10 @@ void imprimir_ranking(const void* dato, size_t tamDato, void* params){
 
 
 ///******************************************************************************************
-/// Evaluar si podemos "dividir" esta función... ¿es necesario?
 /*
     Dado que el usuario selecciona "ver ranking" desde el menú de opciones, considero que la lista de ranking debe "nacer" y "morir" en la misma función que lo genera.
 
     Basado en ese criterio, es la razón por la cual la lista del ranking nace y muere en esta función
-
-    Claramente, puede cambiarse y dividirse, a evaluar.
 */
 ///******************************************************************************************
 
@@ -87,9 +84,9 @@ void crear_y_mostrar_ranking(const char *pathHistorico){
     fclose(pf);
 
     ordenar_lista(&listaRanking,cmp_criterio_ranking); //una vez insertado todos los elementos de forma ordenada por idJugador, ordenamos la lista con el criterior del ranking
-    printf("\n============= RANKING TOP JUGADORES =============\n");
+    printf("\n=================================== RANKING TOP JUGADORES =====================================\n");
     recorrer_lista(&listaRanking,imprimir_ranking,NULL);
-    printf("=================================================\n\n");
+    printf("===============================================================================================\n\n");
 
     vaciar_lista(&listaRanking);
 
