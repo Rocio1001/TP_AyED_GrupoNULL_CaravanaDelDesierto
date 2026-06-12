@@ -13,5 +13,6 @@ typedef struct {
 } tHistorico;
 
 void escribir_historico(tHistorico* historico, const char* pathHistorico);
+void mostrar_historico(const char* file_name);
 
 #endif // HISTORICO_H_INCLUDED

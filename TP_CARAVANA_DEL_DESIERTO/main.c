@@ -7,41 +7,11 @@
 #include "include/sistema_de_puntos/ranking.h"
 #include "include/sesion_e_historico/historico.h"
 
-#include "include/sesion_e_historico/sesion_y_alta.h" ///agus
+#include "include/sesion_e_historico/sesion_y_alta.h"
 
 #define RUTA_HISTORICO_BIN "historico_partidas.bin"
-#define RUTA_MAESTRO_JUGADORES_BIN "maestro_jugadores.bin" ///agus
-
-///función para chequear que todo este oki
-void mostrar_historico(const char* file_name) {
-
-    tHistorico historico;
-    FILE* pArchivo = fopen(file_name, "rb");
-
-    if(pArchivo == NULL) {
-        printf("Error al abrir el archivo\n");
-    }
-
-    printf("  +-----------------------------------------+\n");
-    printf("  |             HISTORICO PARTIDAS          |\n");
-    printf("  +-----------------------------------------+\n");
-
-
-    fread(&historico, sizeof(tHistorico), 1, pArchivo);
-    while(!feof(pArchivo)) {
-
-        printf("ID Partida: %-4d | ID Jugador: %-4d | Nombre Jugador: %-30s | Puntos: %-4d | Movimientos: %-4d \n",
-            historico.idPartida,
-            historico.idJugador,
-            historico.nombreJugador,
-            historico.puntos,
-            historico.movimientos);
-
-        fread(&historico, sizeof(tHistorico), 1, pArchivo);
-    }
-
-    fclose(pArchivo);
-}
+#define RUTA_MAESTRO_JUGADORES_BIN "maestro_jugadores.bin"
+#define FIN_JUEGO 0
 
 int main(){
     int opcion, resultado;
@@ -61,7 +31,7 @@ int main(){
     else{
         ///fin programa;
         printf("  Cerrando el juego...\n");
-        return TODO_OK;
+        return FIN_JUEGO;
     }
 
     system("pause");
@@ -136,5 +106,5 @@ int main(){
     ///esto es para probar que se haya hecho bien
     mostrar_historico(RUTA_HISTORICO_BIN);
 
-    return 0;
+    return FIN_JUEGO;
 }

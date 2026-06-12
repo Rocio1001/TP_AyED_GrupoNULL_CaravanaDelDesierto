@@ -3,7 +3,7 @@
 /* =========================================================
    VALIDACION DE TURNO
    ========================================================= */
-
+ 
 int turno_valido(const tJugador* jugador){
     return jugador->turnoValido;
 }
@@ -193,4 +193,152 @@ void procesar_turno_bandidos(tCola* cola,
         mov.direccion = dir;
         insertar_en_cola(cola, &mov, sizeof(tMovimiento));
     }
+}
+
+/* =========================================================
+   EFECTOS DE CASILLERO
+   ========================================================= */
+
+/*
+ * Aplica los efectos de los elementos estaticos del casillero sobre el jugador.
+ * Premio y Vida Extra desaparecen del tablero al ser recogidos.
+ * Oasis otorga proteccion para el SIGUIENTE turno.
+ * Tormenta hace perder el SIGUIENTE turno (o consume la proteccion si la tenia).
+ */
+void aplicar_efectos_casillero(tJugador* jugador, tCasillero* cas){
+    int i;
+    for(i = 0; i < cas->cantEstaticos; ){
+        switch(cas->estaticos[i]){
+            case CAS_PREMIO:
+                jugador->puntos += 100;
+                printf("  Premio! +100 puntos. Total: %d pts.\n", jugador->puntos);
+                remover_estatico_casillero(cas, CAS_PREMIO);
+                break;
+
+            case CAS_VIDA_EXTRA:
+                jugador->vidas++;
+                printf("  Vida extra! Vidas: %d\n", jugador->vidas);
+                remover_estatico_casillero(cas, CAS_VIDA_EXTRA);
+                break;
+
+            case CAS_OASIS:
+                jugador->proteccion = 2;
+                printf("  Oasis! Tendras proteccion en el proximo turno.\n");
+                i++;
+                break;
+
+            case CAS_TORMENTA:
+                if(jugador->proteccion){
+                    jugador->proteccion = 0;
+                    printf("  Tormenta! Tu proteccion te salvo.\n");
+                } else {
+                    jugador->turnoValido = 0;
+                    printf("  Tormenta! Perderas el proximo turno.\n");
+                }
+                i++;
+                break;
+
+            default:
+                i++;
+                break;
+        }
+    }
+}
+
+/*
+ * Verifica si el jugador comparte casillero con algun bandido activo.
+ * Si lo hay:
+ *   - El bandido es eliminado del tablero.
+ *   - Si el jugador tiene proteccion: la consume y NO pierde vida ni vuelve al inicio.
+ *   - Si no tiene proteccion: pierde 1 vida y vuelve al INICIO.
+ *     Al llegar al inicio se reposicionan los bandidos que hubiera alli.
+ */
+void verificar_encuentro_bandidos(tJugador* jugador, tBandido* bandidos,
+                                   int cantBandidos, tTablero* tablero){
+    tCasillero* cas = (tCasillero*)jugador->posicion->info;
+    tCasillero* casInicio;
+    int i, j;
+
+    if(cas->cantBandidos == 0) return;
+
+    for(i = 0; i < cantBandidos; i++){
+        if(bandidos[i].posicion == jugador->posicion){
+
+            cas->cantBandidos--;
+            bandidos[i].posicion = NULL;
+
+            if(jugador->proteccion){
+                jugador->proteccion = 0;
+                printf("  Un bandido te intercepto! Tu proteccion te salvo (sin perdida de vida).\n");
+            } else {
+                jugador->vidas--;
+                printf("  Un bandido te intercepto! Perdiste 1 vida. Vidas: %d\n",
+                       jugador->vidas);
+
+                cas->hayJugador = 0;
+                jugador->posicion = tablero->lista;
+                casInicio = (tCasillero*)jugador->posicion->info;
+                casInicio->hayJugador = 1;
+                printf("  Volviste al inicio.\n");
+
+                if(casInicio->cantBandidos > 0){
+                    printf("  Habia bandidos en el inicio. Seran reposicionados.\n");
+                    for(j = 0; j < cantBandidos; j++){
+                        if(bandidos[j].posicion == tablero->lista)
+                            reposicionar_bandido(tablero, &bandidos[j]);
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+/* =========================================================
+   HELPERS INTERNOS DE PARTIDA
+   ========================================================= */
+
+/*
+ * Cuenta cuantos casilleros hay entre INICIO y la posicion del jugador
+ * avanzando hacia adelante.
+ */
+int distancia_desde_inicio(const tTablero* tablero, const tJugador* jugador){
+    tNodoD* act = tablero->lista;
+    int dist = 0;
+    while(act != jugador->posicion && dist < tablero->cantidadCasilleros){
+        act = act->sig;
+        dist++;
+    }
+    return dist;
+}
+
+void mostrar_estado(int numero_turno, const tJugador* jugador, tTablero* tablero){
+    actualizar_caravana_txt(tablero, RUTA_CARAVANA);
+    mostrar_caravana_txt(RUTA_CARAVANA);
+    printf("\n  Turno: %-4d | Jugador: %-20s | Vidas: %d | Puntos: %-6d | Proteccion: %s\n",
+           numero_turno + 1,
+           jugador->nombre,
+           jugador->vidas,
+           jugador->puntos,
+           jugador->proteccion > 0 ? "Si" : "No");
+    printf("  -------------------------------------------------------\n");
+}
+
+void escribir_log(FILE* logFile, const tLogMovimientos* entrada){
+    if(!logFile) return;
+    fprintf(logFile, "ID: %-4d | Turno: %-4d | Movimiento: %s\n",
+            entrada->id, entrada->nroMov, entrada->descripcion);
+}
+
+void mostrar_log_partida(const char* ruta){
+    FILE* f = fopen(ruta, "r");
+    char linea[128];
+    if(!f){ printf("\n  (Log no disponible)\n"); return; }
+    printf("\n  +-----------------------------------------------+\n");
+    printf("  |         LOG DE MOVIMIENTOS DE LA PARTIDA      |\n");
+    printf("  +-----------------------------------------------+\n");
+    while(fgets(linea, sizeof(linea), f))
+        printf("  %s", linea);
+    printf("  +-----------------------------------------------+\n");
+    fclose(f);
 }

@@ -1,0 +1,8 @@
+ID: 1    | Turno: 1    | Movimiento: F5
+ID: 2    | Turno: 2    | Movimiento: F4
+ID: 3    | Turno: 3    | Movimiento: F3
+ID: 4    | Turno: 4    | Movimiento: F1
+ID: 5    | Turno: 5    | Movimiento: F3
+ID: 6    | Turno: 6    | Movimiento: F5
+ID: 7    | Turno: 7    | Movimiento: F5
+ID: 8    | Turno: 8    | Movimiento: F2

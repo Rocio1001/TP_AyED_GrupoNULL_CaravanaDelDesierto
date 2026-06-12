@@ -53,14 +53,16 @@ void buscar_en_maestro(tJugadorMaestro *jugador, tIndice *indice, const char *no
 
     pf= fopen(nombArch, "rb");
 
-    if (pf) {
-        fseek(pf, indice->valor * sizeof(tJugadorMaestro), SEEK_SET);
-        fread(jugador, sizeof(tJugadorMaestro), 1, pf); // ¡Corregido el tamaño!
-        fclose(pf);
+    if (!pf) {
+        printf("Error al abrir el archivo maestro\n");
+        return;
     }
+    fseek(pf, indice->valor * sizeof(tJugadorMaestro), SEEK_SET);
+    fread(jugador, sizeof(tJugadorMaestro), 1, pf);
+    fclose(pf);
 }
 
-///arreglar, agregar que busque en el archivo para buscar el id y nombre
+///
 int cargar_jugador_existente(tArbol *arbol, tJugador *jugador, const char *nombArch){
     char nombre[30];
     tNodoA **ppRes;
@@ -164,7 +166,9 @@ int alta_jugador (tArbol *arbol, tJugadorMaestro *jugador, const char *nombArch)
 
 ///envoltorio
 int procesar_alta_y_mapeo(tArbol *arbol, tJugador *jugador, tJugadorMaestro *jugadorSesion, const char *nombArch) {
-    int valorRetorno = alta_jugador(arbol, jugadorSesion, nombArch);
+    int valorRetorno;
+
+    valorRetorno = alta_jugador(arbol, jugadorSesion, nombArch);
 
     if (valorRetorno == SESION_ALTA) {
         jugador->id = jugadorSesion->id;

@@ -46,5 +46,16 @@ void procesar_turno_bandidos(tCola* cola,
                               tBandido* bandidos, int cantBandidos,
                               tJugador* jugador, tTablero* tablero);
 
+// --- Efectos de casillero ---
+void aplicar_efectos_casillero(tJugador* jugador, tCasillero* cas);
+void verificar_encuentro_bandidos(tJugador* jugador, tBandido* bandidos,
+                                   int cantBandidos, tTablero* tablero);
+
+// --- Helpers internos de partida ---
+int  distancia_desde_inicio(const tTablero* tablero, const tJugador* jugador);
+void mostrar_estado(int numero_turno, const tJugador* jugador, tTablero* tablero);
+void escribir_log(FILE* logFile, const tLogMovimientos* entrada);
+void mostrar_log_partida(const char* ruta);
+
 
 #endif // MOVIMIENTO_H_INCLUDED
