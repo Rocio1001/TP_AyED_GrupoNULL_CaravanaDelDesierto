@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "movimiento.h"
+#define FIN_JUEGO 0
 
 /*
 El módulo partida.h es el Orquestador.

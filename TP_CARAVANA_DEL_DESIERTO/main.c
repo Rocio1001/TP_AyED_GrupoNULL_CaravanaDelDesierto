@@ -3,7 +3,7 @@
 #include <time.h>
 
 #include "include/juego/partida.h"
-#include "include/juego/menu.h"
+#include "include/menu/menu.h"
 #include "include/sistema_de_puntos/ranking.h"
 #include "include/sesion_e_historico/historico.h"
 
@@ -11,7 +11,7 @@
 
 #define RUTA_HISTORICO_BIN "historico_partidas.bin"
 #define RUTA_MAESTRO_JUGADORES_BIN "maestro_jugadores.bin"
-#define FIN_JUEGO 0
+
 
 int main(){
     int opcion, resultado;
@@ -105,8 +105,7 @@ int main(){
 
     } while(opcion != 3);
 
-    ///esto es para probar que se haya hecho bien
-    mostrar_historico(RUTA_HISTORICO_BIN);
+   //mostrar_historico(RUTA_HISTORICO_BIN);
 
     return FIN_JUEGO;
 }

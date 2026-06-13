@@ -7,7 +7,7 @@ Nota / Aclarcion en el .c
 
 #include "../tda/arbol.h"
 #include "../entidad/jugador.h"
-#include "../juego/menu.h"
+#include "../menu/menu.h"
 
 #define JUGADOR_NO_ENCONTRADO 0 //esta tiene que quedar como 0, los otros valores creo que se pueden cambiar y no pasria nada (creo)
 #define JUGADOR_CREADO 1

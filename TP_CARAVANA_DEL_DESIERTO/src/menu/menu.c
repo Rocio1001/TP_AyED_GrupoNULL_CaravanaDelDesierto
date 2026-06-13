@@ -1,4 +1,4 @@
-#include "../../include/juego/menu.h"
+#include "../../include/menu/menu.h"
 
 void mostrar_opciones(){
     printf("  +-----------------------------------------+\n");
